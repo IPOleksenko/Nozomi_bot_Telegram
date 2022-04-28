@@ -1,0 +1,88 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-11-29 14:07+0200\n"
+"PO-Revision-Date: 2021-11-30 19:24+0200\n"
+"Last-Translator: \n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 "
+"&& (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+"X-Generator: Poedit 3.0\n"
+
+#: Weather_reaction.py:20
+msgid "Weater_message_1"
+msgstr ""
+"Сегодня, {today} в {arguments} {detailed_status}\n"
+"Температура в районе {temp}°C по Цельсию"
+
+#: Weather_reaction.py:22
+msgid "Weater_message_2"
+msgstr ""
+"\n"
+"Сейчас в {arguments} холодно, одевайся тепло"
+
+#: Weather_reaction.py:24
+msgid "Weater_message_3"
+msgstr ""
+"\n"
+"Сейчас в {arguments} прохладно, одевайся потеплее чтобы не простудится"
+
+#: Weather_reaction.py:26
+msgid "Weater_message_4"
+msgstr ""
+"\n"
+"В {arguments} погода прекрасная! Идём гулять"
+
+#: Weather_reaction.py:29
+msgid "Weater_message_5"
+msgstr ""
+"Я не знаю такого города :(\n"
+"Давай посмотрим погоду в другом месте"
+
+#: bot.py:31
+msgid ""
+"Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"
+msgstr ""
+"Привет, я Nozomi! Если хочешь мной пользоваться тебе надо написать:\n"
+"/start"
+
+#: bot.py:41
+msgid "{Anonimus_user}"
+msgstr "От кого ты скрываешься"
+
+#: bot.py:48
+msgid "{WELCOME}"
+msgstr "Теперь ты можешь пользоваться мной☺️"
+
+#: bot.py:56 bot.py:63 bot.py:74
+msgid "{Firstly_send}"
+msgstr "Если хочешь мной пользоваться тебе надо написать /start в чат"
+
+#: bot.py:68
+msgid "{You_didnt_enter_the_city}"
+msgstr ""
+"Укажи город\n"
+"/weather <city>"
+
+#: bot.py:81
+msgid "{big_file}"
+msgstr "Слишком большой файл, голова болит("
+
+#: bot.py:93
+msgid "{I_heard}"
+msgstr "Я услышала"
+
+#: bot.py:95
+msgid "{BAKA}"
+msgstr "Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз"

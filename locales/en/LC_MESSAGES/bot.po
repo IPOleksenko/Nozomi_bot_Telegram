@@ -1,0 +1,83 @@
+# English translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-11-29 14:07+0200\n"
+"PO-Revision-Date: 2021-11-30 19:20+0200\n"
+"Language: uk\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+"Last-Translator: \n"
+"X-Generator: Poedit 3.0\n"
+
+#: Weather_reaction.py:20
+msgid "Weater_message_1"
+msgstr ""
+"As of {today} in {arguments} is {detailed_status} \n"
+"{temp}°C "
+
+#: Weather_reaction.py:22
+msgid "Weater_message_2"
+msgstr "It's cold in {arguments} now, get warmer"
+
+#: Weather_reaction.py:24
+msgid "Weater_message_3"
+msgstr "It's cood in {arguments} now, get warmer"
+
+#: Weather_reaction.py:26
+msgid "Weater_message_4"
+msgstr "It's a beautiful day in {arguments}, shall we go for a walk"
+
+#: Weather_reaction.py:29
+msgid "Weater_message_5"
+msgstr ""
+"I don't know a city like this :(\n"
+"Why don't you check the weather forecast somewhere else"
+
+#: bot.py:31
+msgid ""
+"Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
+"chat"
+msgstr ""
+"Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
+"chat"
+
+#: bot.py:41
+msgid "{Anonimus_user}"
+msgstr "Who the hell are you"
+
+#: bot.py:48
+msgid "{WELCOME}"
+msgstr "You have access to all my options now☺️"
+
+#: bot.py:56 bot.py:63 bot.py:74
+msgid "{Firstly_send}"
+msgstr "Before you start using me you need to enter /start"
+
+#: bot.py:68
+msgid "{You_didnt_enter_the_city}"
+msgstr ""
+"You didn't enter the city.\n"
+"Example: /weather <city>"
+
+#: bot.py:81
+msgid "{big_file}"
+msgstr "The file size is so big... my head hurts("
+
+#: bot.py:93
+msgid "{I_heard}"
+msgstr "I\\'m heard"
+
+#: bot.py:95
+msgid "{BAKA}"
+msgstr ""
+"It’s too hard to understand you, BAKA. Please repeat what you just said"
