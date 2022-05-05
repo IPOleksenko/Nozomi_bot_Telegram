@@ -8,13 +8,14 @@ from aiogram.utils import executor
 from aiogram.utils.exceptions import FileIsTooBig
 from aiogram.dispatcher.filters import BoundFilter
 from speech_recognition import AudioFile, Recognizer, UnknownValueError, subprocess
+from random import seed, randint
 
 from config import TOKEN, i18n, _
 from SQL import Database_SQL
 from Weather_reaction import Weater_message
 
 r = Recognizer()
-basicConfig(level=DEBUG)
+#basicConfig(level=DEBUG)
 storage = MemoryStorage()
 bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
@@ -28,7 +29,6 @@ def Examination(message):
     return exam
 
 
-### Отклик при команде старт###
 @dp.message_handler(content_types=[ContentType.NEW_CHAT_MEMBERS])
 async def new_members_handler(message: Message):
     await bot.send_message((message.chat.id), _("Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"))
@@ -44,9 +44,7 @@ class MyFilter(BoundFilter):
         return member.is_chat_admin()
 dp.filters_factory.bind(MyFilter)
 
-
-@dp.message_handler(commands=['start'])
-async def info_user(message: types.Message):
+async def info_user(message):
     ##########################################################
     user_id=message.from_user.id
     user_firstname=message.from_user.first_name
@@ -60,32 +58,45 @@ async def info_user(message: types.Message):
     Lang = str(message.from_user.locale)
     ##########################################################
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
-    await message.reply(_('{WELCOME}'))
 
+
+@dp.message_handler(commands=['start'])
+async def start(message: types.Message):
+    if Examination(message)=='None':
+        info_user(message)
+
+    return
 
 @dp.message_handler(commands=['random'])
 async def process_start(message: types.Message):
     if Examination(message)=='None':
-        await message.reply(_('{Firstly_send}'))
-    
-        return None
+        info_user(message)
+
+    seed(1)
+    count[0] = message.get_args()[0] if message.get_args() else ""
+    count = int(count) if count.isdigit() else 0
+    count[1] = message.get_args()[1] if message.get_args() else ""
+    count = int(count) if count.isdigit() else 10
+
+    await message.reply(randint(count[0], count[1]))
+    return 
 
 @dp.message_handler(is_admin=True, commands=['MESSAGE'])
 async def message(message: types.Message):
+    if Examination(message)=='None':
+        info_user(message)
+        
     await bot.delete_message(message.chat.id, message.message_id)
     arguments = message.get_args()
-    if Examination(message)=='None':
-        await message.reply(_('{Firstly_send}'))
-        return None
     await bot.send_message(message.chat.id, arguments)
     return
 
 @dp.message_handler(is_admin=True, commands=['KILLSTICKER'])
 async def KILLSTICKER(message: types.Message):
-    await message.delete()
     if Examination(message)=='None':
-        await message.reply(_('{Firstly_send}'))
-        return None
+        info_user(message)
+
+    await message.delete()
     count = message.get_args()[0] if message.get_args() else ""
     count = int(count) if count.isdigit() else 1
     for _ in range(count):
@@ -94,20 +105,20 @@ async def KILLSTICKER(message: types.Message):
 
 @dp.message_handler(is_admin=True, commands=['MYSTICKER'])
 async def MYSTICKER(message: types.Message):
-    await message.delete()
     if Examination(message)=='None':
-        await message.reply(_('{Firstly_send}'))
-        return None
+        info_user(message)
+
+    await message.delete()
     arguments = message.get_args()
     await message.answer_sticker(arguments)
     return
 
 @dp.message_handler(commands=['weather'])
 async def process_start(message: types.Message):
-    arguments = message.get_args()
     if Examination(message)=='None':
-        await message.reply(_('{Firstly_send}'))
-        return None  
+        info_user(message)
+
+    arguments = message.get_args() 
     if arguments != '':
         await message.reply(Weater_message(arguments, message))    
     else:
@@ -117,8 +128,8 @@ async def process_start(message: types.Message):
 @dp.message_handler(content_types=['voice'])
 async def Voice_recognizer(message: types.Message):
     if Examination(message)=='None':
-        await message.reply(_('{Firstly_send}'))
-        return None  
+        info_user(message)
+
     try:
         src_filename = 'Nozomi_bot_Telegram\\Voice_user\\voice.ogg'    
         newFile = await bot.get_file(message.voice.file_id)
