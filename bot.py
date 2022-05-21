@@ -8,7 +8,7 @@ from aiogram.utils import executor
 from aiogram.utils.exceptions import FileIsTooBig
 from aiogram.dispatcher.filters import BoundFilter
 from speech_recognition import AudioFile, Recognizer, UnknownValueError, subprocess
-from random import seed, randint
+from random import randrange
 
 from config import TOKEN, i18n, _
 from SQL import Database_SQL
@@ -65,6 +65,7 @@ async def start(message: types.Message):
     if Examination(message)=='None':
         info_user(message)
 
+    await message.reply(_('help'))
     return
 
 @dp.message_handler(commands=['random'])
@@ -72,13 +73,25 @@ async def process_start(message: types.Message):
     if Examination(message)=='None':
         info_user(message)
 
-    seed(1)
-    count[0] = message.get_args()[0] if message.get_args() else ""
-    count = int(count) if count.isdigit() else 0
-    count[1] = message.get_args()[1] if message.get_args() else ""
-    count = int(count) if count.isdigit() else 10
-
-    await message.reply(randint(count[0], count[1]))
+    args = message.get_args().split()
+    min = 1
+    max = 10
+    step = 1
+ 
+    if len(args) == 1:
+        max = int(args[0])
+    elif len(args) >= 2:
+        min = int(args[0])
+        max = int(args[1]) 
+    if len(args) >= 3:
+        step = int(args[2])
+ 
+    if max < min:
+        min, max = max, min
+    if step < 1:
+        step = 1
+ 
+    await message.reply(randrange(min, max, step))
     return 
 
 @dp.message_handler(is_admin=True, commands=['MESSAGE'])
