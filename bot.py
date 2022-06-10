@@ -15,7 +15,7 @@ from SQL import Database_SQL
 from Weather_reaction import Weater_message
 
 r = Recognizer()
-#basicConfig(level=DEBUG)
+basicConfig(level=DEBUG)
 storage = MemoryStorage()
 bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
@@ -44,15 +44,12 @@ class MyFilter(BoundFilter):
         return member.is_chat_admin()
 dp.filters_factory.bind(MyFilter)
 
-async def info_user(message):
+def info_user(message):
     ##########################################################
     user_id=message.from_user.id
     user_firstname=message.from_user.first_name
     user_lastname=message.from_user.last_name
     user_username=message.from_user.username
-    if user_username == 'GroupAnonymousBot':
-        await message.reply(_('{Anonimus_user}')+('?'))
-        return
     chat_id=message.chat.id
     datatime= datetime.now()
     Lang = str(message.from_user.locale)
@@ -62,22 +59,20 @@ async def info_user(message):
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
 
     await message.reply(_('help'))
     return
 
 @dp.message_handler(commands=['random'])
 async def process_start(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
 
     args = message.get_args().split()
     min = 1
     max = 10
     step = 1
- 
+
     if len(args) == 1:
         max = int(args[0])
     elif len(args) >= 2:
@@ -85,19 +80,18 @@ async def process_start(message: types.Message):
         max = int(args[1]) 
     if len(args) >= 3:
         step = int(args[2])
- 
+
     if max < min:
         min, max = max, min
     if step < 1:
         step = 1
- 
+
     await message.reply(randrange(min, max, step))
     return 
 
 @dp.message_handler(is_admin=True, commands=['MESSAGE'])
 async def message(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
         
     await bot.delete_message(message.chat.id, message.message_id)
     arguments = message.get_args()
@@ -106,8 +100,7 @@ async def message(message: types.Message):
 
 @dp.message_handler(is_admin=True, commands=['KILLSTICKER'])
 async def KILLSTICKER(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
 
     await message.delete()
     count = message.get_args()[0] if message.get_args() else ""
@@ -118,8 +111,7 @@ async def KILLSTICKER(message: types.Message):
 
 @dp.message_handler(is_admin=True, commands=['MYSTICKER'])
 async def MYSTICKER(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
 
     await message.delete()
     arguments = message.get_args()
@@ -128,8 +120,7 @@ async def MYSTICKER(message: types.Message):
 
 @dp.message_handler(commands=['weather'])
 async def process_start(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
 
     arguments = message.get_args() 
     if arguments != '':
@@ -140,8 +131,7 @@ async def process_start(message: types.Message):
 ###распознование текста в аудио###
 @dp.message_handler(content_types=['voice'])
 async def Voice_recognizer(message: types.Message):
-    if Examination(message)=='None':
-        info_user(message)
+    info_user(message)
 
     try:
         src_filename = 'Nozomi_bot_Telegram\\Voice_user\\voice.ogg'    
@@ -163,6 +153,7 @@ async def Voice_recognizer(message: types.Message):
             await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
         except UnknownValueError:
             await message.reply(_('{BAKA}')+('.'))
+
 if __name__ == '__main__':
     Database_SQL.create_table()
     executor.start_polling(dp, skip_updates=True)

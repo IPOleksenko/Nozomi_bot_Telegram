@@ -20,7 +20,6 @@ class SQL:
         chat_and_user_INFO TEXT PRIMARY KEY,
         Author TEXT
         )''')
-        cursor.close()
 
     def insert(self, user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang):
         chat_and_user_INFO= str(f'user={user_id} | chat={chat_id}')
@@ -29,21 +28,23 @@ class SQL:
             cursor.execute('''DELETE FROM users WHERE chat_and_user_INFO = %s''',(chat_and_user_INFO,))
         finally:
             cursor.execute('''INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang, chat_and_user_INFO ,'IPOleksenko'))
-        cursor.close()
 
     def examination(self, user_id, chat_id):
         cursor=self.conn.cursor()
         chat_and_user_INFO= str(f'user={user_id} | chat={chat_id}')
         cursor.execute('''SELECT user_id FROM users WHERE chat_and_user_INFO = %s''', (chat_and_user_INFO,))
         result = cursor.fetchone()
-        cursor.close()
         return result or 'None'
 
     def select_lang(self, user_id):
         cursor=self.conn.cursor()
         cursor.execute('''SELECT language FROM users WHERE user_id = %s''', (user_id,))
         result = cursor.fetchone()
-        cursor.close()
         return result or 'en'
+
+    def __del__(self):
+        cursor=self.conn.cursor()
+        cursor.close()
+
 Database_SQL = SQL()
 #Author: IPOleksenko

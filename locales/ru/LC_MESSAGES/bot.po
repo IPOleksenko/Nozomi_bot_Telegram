@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-05-21 15:35+0300\n"
-"PO-Revision-Date: 2022-05-21 15:35+0300\n"
+"POT-Creation-Date: 2022-06-10 22:34+0300\n"
+"PO-Revision-Date: 2022-06-10 22:32+0300\n"
 "Last-Translator: \n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
@@ -51,11 +51,7 @@ msgstr ""
 "Привет, я Nozomi! Если хочешь мной пользоваться тебе надо написать:\n"
 "/start"
 
-#: bot.py:54
-msgid "{Anonimus_user}"
-msgstr "От кого ты скрываешься"
-
-#: bot.py:68
+#: bot.py:64
 msgid "help"
 msgstr ""
 "Команда пользователя:\n"
@@ -69,23 +65,26 @@ msgstr ""
 "/MYSTICKER {ID стикера} - бот отправляет стикер\n"
 "\n"
 "Также:\n"
-"Бот переводит голосовые сообщения в текст"
+"-Бот переводит голосовые сообщения в текст"
 
-#: bot.py:138
+#: bot.py:129
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "Укажи город\n"
 "/weather <city>"
 
-#: bot.py:151
+#: bot.py:141
 msgid "{big_file}"
 msgstr "Слишком большой файл, голова болит("
 
-#: bot.py:163
+#: bot.py:153
 msgid "{I_heard}"
 msgstr "Я услышала"
 
-#: bot.py:165
+#: bot.py:155
 msgid "{BAKA}"
 msgstr "Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз"
+
+#~ msgid "{Anonimus_user}"
+#~ msgstr "От кого ты скрываешься"
 

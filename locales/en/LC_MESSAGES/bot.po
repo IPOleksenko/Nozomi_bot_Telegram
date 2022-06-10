@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-05-21 15:35+0300\n"
-"PO-Revision-Date: 2022-05-21 15:35+0300\n"
+"POT-Creation-Date: 2022-06-10 22:34+0300\n"
+"PO-Revision-Date: 2022-06-10 22:33+0300\n"
 "Last-Translator: \n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -50,11 +50,7 @@ msgstr ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
 
-#: bot.py:54
-msgid "{Anonimus_user}"
-msgstr "Who the hell are you"
-
-#: bot.py:68
+#: bot.py:64
 msgid "help"
 msgstr ""
 "User command:\n"
@@ -68,23 +64,26 @@ msgstr ""
 "/MYSTICKER {sticker ID}- bot send sticker\n"
 "\n"
 "Also:\n"
-"Bot translates voice messages into text"
+"-Bot translates voice messages into text"
 
-#: bot.py:138
+#: bot.py:129
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "You didn't enter the city.\n"
 "Example: /weather <city>"
 
-#: bot.py:151
+#: bot.py:141
 msgid "{big_file}"
 msgstr "The file size is so big... my head hurts("
 
-#: bot.py:163
+#: bot.py:153
 msgid "{I_heard}"
 msgstr "I\\'m heard"
 
-#: bot.py:165
+#: bot.py:155
 msgid "{BAKA}"
 msgstr "It’s too hard to understand you, BAKA. Please repeat what you just said"
+
+#~ msgid "{Anonimus_user}"
+#~ msgstr "Who the hell are you"
 
