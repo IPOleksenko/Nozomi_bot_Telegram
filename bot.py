@@ -55,6 +55,10 @@ def info_user(message):
     
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
 
+@dp.message_handler()
+async def message(message):
+    info_user(message)
+
 @dp.message_handler(content_types=['contact'])
 async def contact(message):
     info_user(message)
