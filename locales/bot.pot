@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-10 22:34+0300\n"
+"POT-Creation-Date: 2022-06-29 02:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,23 +43,23 @@ msgid ""
 "chat"
 msgstr ""
 
-#: bot.py:64
+#: bot.py:63
 msgid "help"
 msgstr ""
 
-#: bot.py:129
+#: bot.py:128
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 
-#: bot.py:141
+#: bot.py:140
 msgid "{big_file}"
 msgstr ""
 
-#: bot.py:153
+#: bot.py:152
 msgid "{I_heard}"
 msgstr ""
 
-#: bot.py:155
+#: bot.py:154
 msgid "{BAKA}"
 msgstr ""
 
