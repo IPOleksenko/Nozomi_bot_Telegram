@@ -45,7 +45,6 @@ class MyFilter(BoundFilter):
 dp.filters_factory.bind(MyFilter)
 
 def info_user(message):
-    ##########################################################
     user_id=message.from_user.id
     user_firstname=message.from_user.first_name
     user_lastname=message.from_user.last_name
@@ -53,9 +52,26 @@ def info_user(message):
     chat_id=message.chat.id
     datatime= datetime.now()
     Lang = str(message.from_user.locale)
-    ##########################################################
+    
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
 
+def phone_info_user(message):
+    if message.contact is not None:
+        sender_user_id=message.from_user.id
+        phonenumber= str(message.contact.phone_number)
+        user_id = str(message.contact.user_id)
+        first_name = str(message.contact.first_name)
+        last_name = str(message.contact.last_name)
+        vcard = str(message.contact.vcard)
+        datatime= datetime.now()
+
+        Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
+
+@dp.message_handler(content_types=['contact'])
+async def contact(message):
+    info_user(message)
+
+    phone_info_user(message)
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -134,15 +150,15 @@ async def Voice_recognizer(message: types.Message):
     info_user(message)
 
     try:
-        src_filename = 'Nozomi_bot_Telegram\\Voice_user\\voice.ogg'    
+        src_filename = 'Voice_user\\voice.ogg'    
         newFile = await bot.get_file(message.voice.file_id)
         await newFile.download(src_filename)       
     except FileIsTooBig:
         await message.reply(_('{big_file}'))
         return None
 ###Конвертация файла###
-    dest_filename = f'Nozomi_bot_Telegram\\Voice_user\\voice_output.wav'
-    subprocess.run([f'Nozomi_bot_Telegram\\ffmpeg\\bin\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
+    dest_filename = f'Voice_user\\voice_output.wav'
+    subprocess.run([f'ffmpeg\\bin\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
 ###Распознование слов###
     with AudioFile(dest_filename) as source:
         r.adjust_for_ambient_noise(source, duration=0.5)
@@ -153,6 +169,7 @@ async def Voice_recognizer(message: types.Message):
             await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
         except UnknownValueError:
             await message.reply(_('{BAKA}')+('.'))
+
 
 if __name__ == '__main__':
     Database_SQL.create_table()

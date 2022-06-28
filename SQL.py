@@ -9,6 +9,7 @@ class SQL:
 
     def create_table(self):
         cursor=self.conn.cursor()  
+        
         cursor.execute('''CREATE TABLE IF NOT EXISTS users (
         user_id BIGSERIAL, 
         user_firstname TEXT, 
@@ -21,6 +22,18 @@ class SQL:
         Author TEXT
         )''')
 
+        cursor.execute('''CREATE TABLE IF NOT EXISTS phone (
+        sender_user_id BIGSERIAL, 
+        phonenumber TEXT, 
+        user_id BIGSERIAL, 
+        first_name TEXT, 
+        last_name TEXT,
+        vcard TEXT,
+        datatime TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
     def insert(self, user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang):
         chat_and_user_INFO= str(f'user={user_id} | chat={chat_id}')
         cursor=self.conn.cursor()
@@ -28,6 +41,14 @@ class SQL:
             cursor.execute('''DELETE FROM users WHERE chat_and_user_INFO = %s''',(chat_and_user_INFO,))
         finally:
             cursor.execute('''INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang, chat_and_user_INFO ,'IPOleksenko'))
+
+    def phoneSeve(self, sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime):
+        allInfo = str(f"sender_user_id={sender_user_id} | phonenumber={phonenumber} | user_id={user_id} | first_name={first_name} | last_name={last_name} | vcard={vcard} | datatime={datatime}")
+        cursor=self.conn.cursor()
+        try:
+            cursor.execute('''DELETE FROM phone WHERE allInfo = %s''',(allInfo,))
+        finally:
+            cursor.execute('''INSERT INTO phone VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime, allInfo,'IPOleksenko'))
 
     def examination(self, user_id, chat_id):
         cursor=self.conn.cursor()
