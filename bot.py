@@ -70,6 +70,23 @@ async def contact(message):
 
         Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
 
+@dp.message_handler(content_types=['location'])
+async def location(message):
+    info_user(message)
+
+    if message.location is not None:
+        latitude = message.location.latitude
+        longitude = message.location.longitude
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+        
+        Database_SQL.locationSeve(latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     info_user(message)
