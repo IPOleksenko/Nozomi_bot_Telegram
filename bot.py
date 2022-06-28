@@ -55,7 +55,10 @@ def info_user(message):
     
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
 
-def phone_info_user(message):
+@dp.message_handler(content_types=['contact'])
+async def contact(message):
+    info_user(message)
+
     if message.contact is not None:
         sender_user_id=message.from_user.id
         phonenumber= str(message.contact.phone_number)
@@ -66,12 +69,6 @@ def phone_info_user(message):
         datatime= datetime.now()
 
         Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
-
-@dp.message_handler(content_types=['contact'])
-async def contact(message):
-    info_user(message)
-
-    phone_info_user(message)
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
