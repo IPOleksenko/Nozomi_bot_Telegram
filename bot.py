@@ -55,41 +55,6 @@ def info_user(message):
     
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
 
-@dp.message_handler()
-async def message(message):
-    info_user(message)
-
-@dp.message_handler(content_types=['contact'])
-async def contact(message):
-    info_user(message)
-
-    if message.contact is not None:
-        sender_user_id=message.from_user.id
-        phonenumber= str(message.contact.phone_number)
-        user_id = str(message.contact.user_id)
-        first_name = str(message.contact.first_name)
-        last_name = str(message.contact.last_name)
-        vcard = str(message.contact.vcard)
-        datatime= datetime.now()
-
-        Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
-
-@dp.message_handler(content_types=['location'])
-async def location(message):
-    info_user(message)
-
-    if message.location is not None:
-        latitude = message.location.latitude
-        longitude = message.location.longitude
-        
-        user_id=message.from_user.id
-        user_firstname=message.from_user.first_name
-        user_lastname=message.from_user.last_name
-        user_username=message.from_user.username
-        chat_id=message.chat.id
-        datatime= datetime.now()
-        
-        Database_SQL.locationSeve(latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -187,6 +152,43 @@ async def Voice_recognizer(message: types.Message):
             await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
         except UnknownValueError:
             await message.reply(_('{BAKA}')+('.'))
+
+
+@dp.message_handler()
+async def message(message):
+    info_user(message)
+
+@dp.message_handler(content_types=['contact'])
+async def contact(message):
+    info_user(message)
+
+    if message.contact is not None:
+        sender_user_id=message.from_user.id
+        phonenumber= str(message.contact.phone_number)
+        user_id = str(message.contact.user_id)
+        first_name = str(message.contact.first_name)
+        last_name = str(message.contact.last_name)
+        vcard = str(message.contact.vcard)
+        datatime= datetime.now()
+
+        Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
+
+@dp.message_handler(content_types=['location'])
+async def location(message):
+    info_user(message)
+
+    if message.location is not None:
+        latitude = message.location.latitude
+        longitude = message.location.longitude
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+        
+        Database_SQL.locationSeve(latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
 
 
 if __name__ == '__main__':
