@@ -6,6 +6,8 @@ TOKEN = getenv("TOKEN")
 OW_API = getenv("OW_API")
 DATABASE_URL = getenv("DATABASE_URL")
 
+ADMIN_CHAT = getenv("ADMIN_CHAT")
+
 I18N_DOMAIN = 'bot'
 BASE_DIR = Path(__file__).parent
 LOCALES_DIR = BASE_DIR / 'locales'

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-29 02:21+0300\n"
-"PO-Revision-Date: 2022-06-29 02:18+0300\n"
+"POT-Creation-Date: 2022-06-29 07:48+0300\n"
+"PO-Revision-Date: 2022-06-29 07:48+0300\n"
 "Last-Translator: \n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -22,11 +22,14 @@ msgstr ""
 msgid "Weater_message_1"
 msgstr ""
 "As of {today} in {arguments} is {detailed_status} \n"
-"{temp}°C"
+"{temp}°C\n"
+" "
 
 #: Weather_reaction.py:22
 msgid "Weater_message_2"
-msgstr "It's cold in {arguments} now, get warmer"
+msgstr ""
+"It's cold in {arguments} now, get warmer\n"
+" "
 
 #: Weather_reaction.py:24
 msgid "Weater_message_3"
@@ -48,7 +51,8 @@ msgid ""
 "chat"
 msgstr ""
 "Hi, I'm Nozomi! If you want to learn how to use me, you need to write:\n"
-"/start"
+"/start\n"
+" "
 
 #: bot.py:63
 msgid "help"
@@ -70,19 +74,26 @@ msgstr ""
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "You didn't enter the city.\n"
-"Example: /weather <city>"
+"Example: /weather <city>\n"
+" "
 
-#: bot.py:140
+#: bot.py:292
 msgid "{big_file}"
-msgstr "The file size is so big... my head hurts("
+msgstr ""
+"The file size is so big... my head hurts(\n"
+" "
 
-#: bot.py:152
+#: bot.py:304
 msgid "{I_heard}"
-msgstr "I\\'m heard"
+msgstr ""
+"I\\'m heard\n"
+" "
 
-#: bot.py:154
+#: bot.py:306
 msgid "{BAKA}"
-msgstr "It’s too hard to understand you, BAKA. Please repeat what you just said"
+msgstr ""
+"It’s too hard to understand you, BAKA. Please repeat what you just said\n"
+" "
 
 #~ msgid "{Anonimus_user}"
 #~ msgstr "Who the hell are you"

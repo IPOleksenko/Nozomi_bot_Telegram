@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-29 02:21+0300\n"
-"PO-Revision-Date: 2022-06-29 02:19+0300\n"
+"POT-Creation-Date: 2022-06-29 07:48+0300\n"
+"PO-Revision-Date: 2022-06-29 07:48+0300\n"
 "Last-Translator: \n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
@@ -23,7 +23,8 @@ msgstr ""
 msgid "Weater_message_1"
 msgstr ""
 "Сегодня, {today} в {arguments} {detailed_status}\n"
-"Температура в районе {temp}°C по Цельсию"
+"Температура в районе {temp}°C по Цельсию\n"
+" "
 
 #: Weather_reaction.py:22
 msgid "Weater_message_2"
@@ -50,7 +51,8 @@ msgid ""
 msgstr ""
 "Привет, я Nozomi! Если хочешь научиться мной пользоваться тебе надо "
 "написать:\n"
-"/start"
+"/start\n"
+" "
 
 #: bot.py:63
 msgid "help"
@@ -66,25 +68,33 @@ msgstr ""
 "/MYSTICKER {ID стикера} - бот отправляет стикер\n"
 "\n"
 "Также:\n"
-"-Бот переводит голосовые сообщения в текст"
+"-Бот переводит голосовые сообщения в текст\n"
+" "
 
 #: bot.py:128
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "Укажи город\n"
-"/weather <city>"
+"/weather <city>\n"
+" "
 
-#: bot.py:140
+#: bot.py:292
 msgid "{big_file}"
-msgstr "Слишком большой файл, голова болит("
+msgstr ""
+"Слишком большой файл, голова болит(\n"
+" "
 
-#: bot.py:152
+#: bot.py:304
 msgid "{I_heard}"
-msgstr "Я услышала"
+msgstr ""
+"Я услышала\n"
+" "
 
-#: bot.py:154
+#: bot.py:306
 msgid "{BAKA}"
-msgstr "Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз"
+msgstr ""
+"Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз\n"
+" "
 
 #~ msgid "{Anonimus_user}"
 #~ msgstr "От кого ты скрываешься"

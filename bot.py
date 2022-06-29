@@ -127,36 +127,13 @@ async def process_start(message: types.Message):
     else:
         await message.reply(_('{You_didnt_enter_the_city}'))
 
-###распознование текста в аудио###
-@dp.message_handler(content_types=['voice'])
-async def Voice_recognizer(message: types.Message):
-    info_user(message)
-
-    try:
-        src_filename = 'Voice_user\\voice.ogg'    
-        newFile = await bot.get_file(message.voice.file_id)
-        await newFile.download(src_filename)       
-    except FileIsTooBig:
-        await message.reply(_('{big_file}'))
-        return None
-###Конвертация файла###
-    dest_filename = f'Voice_user\\voice_output.wav'
-    subprocess.run([f'ffmpeg\\bin\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
-###Распознование слов###
-    with AudioFile(dest_filename) as source:
-        r.adjust_for_ambient_noise(source, duration=0.5)
-        r.energy_threshold = 300
-        try:
-            text = r.recognize_google(r.record(source), language = str(message.from_user.locale))
-            text = ''.join(text)
-            await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
-        except UnknownValueError:
-            await message.reply(_('{BAKA}')+('.'))
 
 
 @dp.message_handler()
 async def message(message):
     info_user(message)
+
+    return
 
 @dp.message_handler(content_types=['contact'])
 async def contact(message):
@@ -172,6 +149,7 @@ async def contact(message):
         datatime= datetime.now()
 
         Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
+    return
 
 @dp.message_handler(content_types=['location'])
 async def location(message):
@@ -189,6 +167,143 @@ async def location(message):
         datatime= datetime.now()
         
         Database_SQL.locationSeve(latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+
+@dp.message_handler(content_types=['photo'])
+async def photo(message):
+    info_user(message)
+
+    if message.photo is not None:
+        document_id = message.photo[0].file_id
+
+        photo_info = await bot.get_file(document_id)
+        photo_id = photo_info.file_id
+        photo_path = photo_info.file_path
+        photo_size = photo_info.file_size
+        photo_unique_id = photo_info.file_unique_id
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.photoSeve(str(photo_info), photo_id, photo_path, photo_size, photo_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+
+    return
+
+@dp.message_handler(content_types=['video'])
+async def video(message):
+    info_user(message)
+
+    if message.video is not None:
+        document_id = message.video.file_id
+
+        video_info = await bot.get_file(document_id)
+        video_id = video_info.file_id
+        video_path = video_info.file_path
+        video_size = video_info.file_size
+        video_unique_id = video_info.file_unique_id
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.videoSeve(str(video_info), video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    return
+
+@dp.message_handler(content_types=['video_note'])
+async def VideoNote(message):
+    info_user(message)
+
+    if message.video_note is not None:
+        document_id = message.video_note.file_id
+        VideoNote_info = await bot.get_file(document_id)
+        VideoNote_id = VideoNote_info.file_id
+        VideoNote_path = VideoNote_info.file_path
+        VideoNote_size = VideoNote_info.file_size
+        VideoNote_unique_id = VideoNote_info.file_unique_id
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.VideoNoteSeve(str(VideoNote_info), VideoNote_id, VideoNote_path, VideoNote_size, VideoNote_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    return
+
+@dp.message_handler(content_types=['document'])
+async def document(message):
+    info_user(message)
+
+    if message.document is not None:
+        document_id = message.document.file_id
+
+        document_info = await bot.get_file(document_id)
+        document_id = document_info.file_id
+        document_path = document_info.file_path
+        document_size = document_info.file_size
+        document_unique_id = document_info.file_unique_id
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.documentSeve(str(document_info), document_id, document_path, document_size, document_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    return
+
+def voice(message, voice_info):
+    voice_id = voice_info.file_id
+    voice_path = voice_info.file_path
+    voice_size = voice_info.file_size
+    voice_unique_id = voice_info.file_unique_id
+    
+    user_id=message.from_user.id
+    user_firstname=message.from_user.first_name
+    user_lastname=message.from_user.last_name
+    user_username=message.from_user.username
+    chat_id=message.chat.id
+    datatime= datetime.now()
+    Database_SQL.voiceSeve(str(voice_info), voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+
+    return
+
+###распознование текста в аудио###
+@dp.message_handler(content_types=['voice'])
+async def Voice_recognizer(message: types.Message):
+    info_user(message)
+
+    
+    try:
+        src_filename = 'Voice_user\\voice.ogg'    
+        newFile = await bot.get_file(message.voice.file_id)
+        if message.voice is not None:
+            voice(message, newFile)
+        await newFile.download(src_filename)       
+    except FileIsTooBig:
+        await message.reply(_('{big_file}'))
+        return None
+###Конвертация файла###
+    dest_filename = f'Voice_user\\voice_output.wav'
+    subprocess.run([f'ffmpeg\\bin\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
+###Распознование слов###
+    with AudioFile(dest_filename) as source:
+        r.adjust_for_ambient_noise(source, duration=0.5)
+        r.energy_threshold = 300
+        try:
+            text = r.recognize_google(r.record(source), language = str(message.from_user.locale))
+            text = ''.join(text)
+            await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
+        except UnknownValueError:
+            await message.reply(_('{BAKA}')+('.'))
 
 
 if __name__ == '__main__':
