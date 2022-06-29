@@ -21,6 +21,34 @@ class SQL:
         Author TEXT
         )''')
 
+
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS message (
+        message TEXT, 
+        user_id BIGSERIAL, 
+        user_firstname TEXT, 
+        user_lastname TEXT, 
+        user_username TEXT, 
+        chat_id BIGSERIAL, 
+        time TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS sticker (
+        sticker_id TEXT, 
+        file_unique_id TEXT,
+        name TEXT, 
+        emoji TEXT, 
+        user_id BIGSERIAL, 
+        user_firstname TEXT, 
+        user_lastname TEXT, 
+        user_username TEXT, 
+        chat_id BIGSERIAL, 
+        time TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS phone (
         sender_user_id BIGSERIAL, 
         phonenumber TEXT, 
@@ -149,6 +177,21 @@ class SQL:
             self.cursor.execute('''DELETE FROM users WHERE chat_and_user_INFO = %s''',(chat_and_user_INFO,))
         finally:
             self.cursor.execute('''INSERT INTO users VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang, chat_and_user_INFO ,'IPOleksenko'))
+
+
+    def messageSave(self, message, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"message={message} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} | chat_id={chat_id} | datatime={time}")
+        try:
+            self.cursor.execute('''DELETE FROM message WHERE allInfo = %s''',(allInfo,))
+        finally:
+            self.cursor.execute('''INSERT INTO message VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (message, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
+
+    def stickerSave(self, sticker_id, file_unique_id, name, emoji, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"sticker_id={sticker_id} | file_unique_id={file_unique_id} | name={name} | emoji={emoji} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} | chat_id={chat_id} | datatime={time}")
+        try:
+            self.cursor.execute('''DELETE FROM sticker WHERE allInfo = %s''',(allInfo,))
+        finally:
+            self.cursor.execute('''INSERT INTO sticker VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (sticker_id, file_unique_id, name, emoji, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
 
     def phoneSeve(self, sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime):

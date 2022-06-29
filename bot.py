@@ -130,10 +130,39 @@ async def process_start(message: types.Message):
 
 
 @dp.message_handler()
-async def message(message):
+async def void(message):
     info_user(message)
 
+    if message.text is not None:
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.messageSave(message.text, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
     return
+
+@dp.message_handler(content_types=['sticker'])
+async def sticker(message):
+    info_user(message)
+
+    if message.sticker is not None:
+        sticker_id=message.sticker.file_id
+        file_unique_id=message.sticker.file_unique_id 
+        name= message.sticker.set_name 
+        emoji=message.sticker.emoji
+
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.stickerSave(sticker_id, file_unique_id, name, emoji, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)    
+        return
 
 @dp.message_handler(content_types=['contact'])
 async def contact(message):
