@@ -106,22 +106,6 @@ class SQL:
         Author TEXT
         )''')
 
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS video (
-        video_info TEXT, 
-        video_id TEXT, 
-        video_path TEXT, 
-        video_size TEXT, 
-        video_unique_id TEXT,
-        user_id BIGSERIAL, 
-        user_firstname TEXT, 
-        user_lastname TEXT, 
-        user_username TEXT, 
-        chat_id BIGSERIAL,
-        time TIMESTAMP,
-        allInfo TEXT PRIMARY KEY,
-        Author TEXT
-        )''')
-
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS voice (
         voice_info TEXT, 
         voice_id TEXT, 
