@@ -56,9 +56,23 @@ def info_user(message):
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
     return
 
+def message_save(message):
+    if message.text is not None:
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.messageSave(message.text, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     info_user(message)
+    message_save(message)
+
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     await message.reply(_('help'))
@@ -67,6 +81,8 @@ async def start(message: types.Message):
 @dp.message_handler(commands=['random'])
 async def process_start(message: types.Message):
     info_user(message)
+    message_save(message)
+
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     args = message.get_args().split()
@@ -93,6 +109,8 @@ async def process_start(message: types.Message):
 @dp.message_handler(is_admin=True, commands=['MESSAGE'])
 async def message(message: types.Message):
     info_user(message)
+    message_save(message)
+
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
         
     await bot.delete_message(message.chat.id, message.message_id)
@@ -103,6 +121,8 @@ async def message(message: types.Message):
 @dp.message_handler(is_admin=True, commands=['KILLSTICKER'])
 async def KILLSTICKER(message: types.Message):
     info_user(message)
+    message_save(message)
+
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     await message.delete()
@@ -115,6 +135,8 @@ async def KILLSTICKER(message: types.Message):
 @dp.message_handler(is_admin=True, commands=['MYSTICKER'])
 async def MYSTICKER(message: types.Message):
     info_user(message)
+    message_save(message)
+
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     await message.delete()
@@ -125,6 +147,7 @@ async def MYSTICKER(message: types.Message):
 @dp.message_handler(commands=['weather'])
 async def process_start(message: types.Message):
     info_user(message)
+    message_save(message)
 
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
@@ -139,17 +162,8 @@ async def process_start(message: types.Message):
 @dp.message_handler(content_types=['text'])
 async def message(message):
     info_user(message)
+    message_save(message)
 
-    if message.text is not None:
-        user_id=message.from_user.id
-        user_firstname=message.from_user.first_name
-        user_lastname=message.from_user.last_name
-        user_username=message.from_user.username
-        chat_id=message.chat.id
-        datatime= datetime.now()
-
-        Database_SQL.messageSave(message.text, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
-    
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
