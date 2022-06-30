@@ -10,7 +10,7 @@ from aiogram.dispatcher.filters import BoundFilter
 from speech_recognition import AudioFile, Recognizer, UnknownValueError, subprocess
 from random import randrange
 
-from config import TOKEN, i18n, _
+from config import TOKEN, CHAT_FOR_FORWARD, i18n, _
 from SQL import Database_SQL
 from Weather_reaction import Weater_message
 
@@ -54,11 +54,12 @@ def info_user(message):
     Lang = str(message.from_user.locale)
     
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
-
+    return
 
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
     info_user(message)
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     await message.reply(_('help'))
     return
@@ -66,6 +67,7 @@ async def start(message: types.Message):
 @dp.message_handler(commands=['random'])
 async def process_start(message: types.Message):
     info_user(message)
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     args = message.get_args().split()
     min = 1
@@ -91,6 +93,7 @@ async def process_start(message: types.Message):
 @dp.message_handler(is_admin=True, commands=['MESSAGE'])
 async def message(message: types.Message):
     info_user(message)
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
         
     await bot.delete_message(message.chat.id, message.message_id)
     arguments = message.get_args()
@@ -100,6 +103,7 @@ async def message(message: types.Message):
 @dp.message_handler(is_admin=True, commands=['KILLSTICKER'])
 async def KILLSTICKER(message: types.Message):
     info_user(message)
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     await message.delete()
     count = message.get_args()[0] if message.get_args() else ""
@@ -111,6 +115,7 @@ async def KILLSTICKER(message: types.Message):
 @dp.message_handler(is_admin=True, commands=['MYSTICKER'])
 async def MYSTICKER(message: types.Message):
     info_user(message)
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     await message.delete()
     arguments = message.get_args()
@@ -129,8 +134,8 @@ async def process_start(message: types.Message):
 
 
 
-@dp.message_handler()
-async def void(message):
+@dp.message_handler(content_types=['text'])
+async def message(message):
     info_user(message)
 
     if message.text is not None:
@@ -142,6 +147,76 @@ async def void(message):
         datatime= datetime.now()
 
         Database_SQL.messageSave(message.text, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    return
+
+@dp.message_handler(content_types=['dice'])
+async def dice(message):
+    info_user(message)
+
+    if message.dice is not None:
+        emoji=message.dice.emoji
+        value=message.dice.value
+
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.diceSave(emoji, value, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    return
+
+
+@dp.message_handler(content_types=['animation'])
+async def animation(message):
+    info_user(message)
+
+    if message.animation is not None:
+        animation_id = message.animation.file_id
+        animation_info = await bot.get_file(animation_id)
+        animation_id = animation_info.file_id
+        animation_path = animation_info.file_path
+        animation_size = animation_info.file_size
+        animation_unique_id = animation_info.file_unique_id
+
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+        Database_SQL.animationSave(str(animation_info), animation_id, animation_path, animation_size, animation_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    return
+
+@dp.message_handler(content_types=['poll'])
+async def poll(message):
+    info_user(message)
+
+    if message.poll is not None:
+        poll_id=message.poll.id
+        poll_question=message.poll.question
+        poll_options=message.poll.options
+        poll_correct_option_id=message.poll.correct_option_id
+        poll_explanation=message.poll.explanation
+        poll_is_anonymous=message.poll.is_anonymous
+
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+
+        Database_SQL.pollSave(poll_id, poll_question, str(poll_options), poll_correct_option_id, poll_explanation, poll_is_anonymous, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
 @dp.message_handler(content_types=['sticker'])
@@ -162,6 +237,8 @@ async def sticker(message):
         datatime= datetime.now()
 
         Database_SQL.stickerSave(sticker_id, file_unique_id, name, emoji, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)    
+        
+        await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
         return
 
 @dp.message_handler(content_types=['contact'])
@@ -177,7 +254,9 @@ async def contact(message):
         vcard = str(message.contact.vcard)
         datatime= datetime.now()
 
-        Database_SQL.phoneSeve(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
+        Database_SQL.phoneSave(sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
 @dp.message_handler(content_types=['location'])
@@ -195,7 +274,10 @@ async def location(message):
         chat_id=message.chat.id
         datatime= datetime.now()
         
-        Database_SQL.locationSeve(latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+        Database_SQL.locationSave(latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    return 
 
 @dp.message_handler(content_types=['photo'])
 async def photo(message):
@@ -217,8 +299,9 @@ async def photo(message):
         chat_id=message.chat.id
         datatime= datetime.now()
 
-        Database_SQL.photoSeve(str(photo_info), photo_id, photo_path, photo_size, photo_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
-
+        Database_SQL.photoSave(str(photo_info), photo_id, photo_path, photo_size, photo_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
 @dp.message_handler(content_types=['video'])
@@ -241,7 +324,9 @@ async def video(message):
         chat_id=message.chat.id
         datatime= datetime.now()
 
-        Database_SQL.videoSeve(str(video_info), video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+        Database_SQL.videoSave(str(video_info), video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
 @dp.message_handler(content_types=['video_note'])
@@ -263,7 +348,9 @@ async def VideoNote(message):
         chat_id=message.chat.id
         datatime= datetime.now()
 
-        Database_SQL.VideoNoteSeve(str(VideoNote_info), VideoNote_id, VideoNote_path, VideoNote_size, VideoNote_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+        Database_SQL.VideoNoteSave(str(VideoNote_info), VideoNote_id, VideoNote_path, VideoNote_size, VideoNote_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
 @dp.message_handler(content_types=['document'])
@@ -286,7 +373,9 @@ async def document(message):
         chat_id=message.chat.id
         datatime= datetime.now()
 
-        Database_SQL.documentSeve(str(document_info), document_id, document_path, document_size, document_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+        Database_SQL.documentSave(str(document_info), document_id, document_path, document_size, document_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
 def voice(message, voice_info):
@@ -301,7 +390,7 @@ def voice(message, voice_info):
     user_username=message.from_user.username
     chat_id=message.chat.id
     datatime= datetime.now()
-    Database_SQL.voiceSeve(str(voice_info), voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    Database_SQL.voiceSave(str(voice_info), voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
 
     return
 
@@ -310,6 +399,7 @@ def voice(message, voice_info):
 async def Voice_recognizer(message: types.Message):
     info_user(message)
 
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     
     try:
         src_filename = 'Voice_user\\voice.ogg'    

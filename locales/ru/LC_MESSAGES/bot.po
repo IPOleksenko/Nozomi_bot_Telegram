@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-29 07:48+0300\n"
-"PO-Revision-Date: 2022-06-29 07:48+0300\n"
+"POT-Creation-Date: 2022-06-30 17:12+0300\n"
+"PO-Revision-Date: 2022-06-30 17:12+0300\n"
 "Last-Translator: \n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
@@ -54,43 +54,43 @@ msgstr ""
 "/start\n"
 " "
 
-#: bot.py:63
+#: bot.py:64
 msgid "help"
 msgstr ""
 "Команда пользователя:\n"
 "/start - список команд\n"
 "/weather {город} - бот отправляет сообщение о погоде\n"
-"/random  {start} {end} {step} — выводит случайно число\n"
+"/random  {начальное число} {конечное число - 1} {шаг} — выводит случайно "
+"число\n"
 "\n"
 "Команда администратора:\n"
 "/MESSAGE {сообщение} - бот отправляет сообщение\n"
-"/KILLSTICKER - бот присылает стикер, сильно нагружающий Telegram\n"
+"/KILLSTICKER {количество} - бот присылает стикер, сильно нагружающий "
+"Telegram\n"
 "/MYSTICKER {ID стикера} - бот отправляет стикер\n"
 "\n"
 "Также:\n"
 "-Бот переводит голосовые сообщения в текст\n"
 " "
 
-#: bot.py:128
+#: bot.py:133
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "Укажи город\n"
 "/weather <city>\n"
 " "
 
-#: bot.py:292
+#: bot.py:389
 msgid "{big_file}"
 msgstr ""
 "Слишком большой файл, голова болит(\n"
 " "
 
-#: bot.py:304
+#: bot.py:401
 msgid "{I_heard}"
-msgstr ""
-"Я услышала\n"
-" "
+msgstr "Я услышала"
 
-#: bot.py:306
+#: bot.py:403
 msgid "{BAKA}"
 msgstr ""
 "Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз\n"

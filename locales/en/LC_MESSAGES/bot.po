@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-29 07:48+0300\n"
-"PO-Revision-Date: 2022-06-29 07:48+0300\n"
+"POT-Creation-Date: 2022-06-30 17:12+0300\n"
+"PO-Revision-Date: 2022-06-30 17:12+0300\n"
 "Last-Translator: \n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -54,42 +54,40 @@ msgstr ""
 "/start\n"
 " "
 
-#: bot.py:63
+#: bot.py:64
 msgid "help"
 msgstr ""
 "User command:\n"
 "/start - command list \n"
 "/weather {city} - bot send weather message\n"
-"/random {start} {end} {step} - generates a random number\n"
+"/random {start} {end - 1} {step} - generates a random number\n"
 "\n"
 "Administrator command:\n"
 "/MESSAGE {message} - bot send message\n"
-"/KILLSTICKER - bot send sticker that heavily loads Telegram\n"
+"/KILLSTICKER {amount} - bot send sticker that heavily loads Telegram\n"
 "/MYSTICKER {sticker ID}- bot send sticker\n"
 "\n"
 "Also:\n"
 "-Bot translates voice messages into text"
 
-#: bot.py:128
+#: bot.py:133
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "You didn't enter the city.\n"
 "Example: /weather <city>\n"
 " "
 
-#: bot.py:292
+#: bot.py:389
 msgid "{big_file}"
 msgstr ""
 "The file size is so big... my head hurts(\n"
 " "
 
-#: bot.py:304
+#: bot.py:401
 msgid "{I_heard}"
-msgstr ""
-"I\\'m heard\n"
-" "
+msgstr "I\\'m heard"
 
-#: bot.py:306
+#: bot.py:403
 msgid "{BAKA}"
 msgstr ""
 "It’s too hard to understand you, BAKA. Please repeat what you just said\n"

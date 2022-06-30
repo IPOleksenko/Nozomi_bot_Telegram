@@ -34,6 +34,19 @@ class SQL:
         Author TEXT
         )''')
 
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS dice (
+        emoji TEXT, 
+        value BIGSERIAL,
+        user_id BIGSERIAL, 
+        user_firstname TEXT, 
+        user_lastname TEXT, 
+        user_username TEXT, 
+        chat_id BIGSERIAL, 
+        time TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS sticker (
         sticker_id TEXT, 
         file_unique_id TEXT,
@@ -138,6 +151,39 @@ class SQL:
         Author TEXT
         )''')
 
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS animation (
+        animation_info TEXT, 
+        animation_id TEXT, 
+        animation_path TEXT, 
+        animation_size TEXT, 
+        animation_unique_id TEXT,
+        user_id BIGSERIAL, 
+        user_firstname TEXT, 
+        user_lastname TEXT, 
+        user_username TEXT, 
+        chat_id BIGSERIAL,
+        time TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS poll (
+        poll_id TEXT, 
+        poll_question TEXT, 
+        poll_options TEXT, 
+        poll_correct_option_id TEXT, 
+        poll_explanation TEXT, 
+        poll_is_anonymous BOOLEAN,
+        user_id BIGSERIAL, 
+        user_firstname TEXT, 
+        user_lastname TEXT, 
+        user_username TEXT, 
+        chat_id BIGSERIAL,
+        time TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS VideoNote (
         VideoNote_info TEXT, 
         VideoNote_id TEXT, 
@@ -170,6 +216,13 @@ class SQL:
         finally:
             self.cursor.execute('''INSERT INTO message VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (message, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
+    def diceSave(self, emoji, value, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"emoji={emoji} | value={value} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} | chat_id={chat_id} | datatime={time}")
+        try:
+            self.cursor.execute('''DELETE FROM dice WHERE allInfo = %s''',(allInfo,))
+        finally:
+            self.cursor.execute('''INSERT INTO dice VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (emoji, value, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
+
     def stickerSave(self, sticker_id, file_unique_id, name, emoji, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"sticker_id={sticker_id} | file_unique_id={file_unique_id} | name={name} | emoji={emoji} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} | chat_id={chat_id} | datatime={time}")
         try:
@@ -177,55 +230,68 @@ class SQL:
         finally:
             self.cursor.execute('''INSERT INTO sticker VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (sticker_id, file_unique_id, name, emoji, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
-
-    def phoneSeve(self, sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime):
+    def phoneSave(self, sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime):
         allInfo = str(f"sender_user_id={sender_user_id} | phonenumber={phonenumber} | user_id={user_id} | first_name={first_name} | last_name={last_name} | vcard={vcard} | datatime={datatime}")
         try:
             self.cursor.execute('''DELETE FROM phone WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO phone VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)''', (sender_user_id, phonenumber, user_id, first_name, last_name, vcard, datatime, allInfo,'IPOleksenko'))
 
-    def locationSeve(self, latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+    def locationSave(self, latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"latitude={latitude} | longitude={longitude} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} | chat_id={chat_id} | time={time}")
         try:
             self.cursor.execute('''DELETE FROM location WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO location VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (latitude, longitude, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
-    def photoSeve(self, photo_info, photo_id, photo_path, photo_size, photo_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+    def photoSave(self, photo_info, photo_id, photo_path, photo_size, photo_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"photo_info={photo_info} | photo_id={photo_id} | photo_path={photo_path} | photo_size={photo_size} | photo_unique_id={photo_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
         try:
             self.cursor.execute('''DELETE FROM photo WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO photo VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (photo_info, photo_id, photo_path, photo_size, photo_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
-    def videoSeve(self, video_info, video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+    def videoSave(self, video_info, video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"video_info={video_info} | video_id={video_id} | video_path={video_path} | video_size={video_size} | video_unique_id={video_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
         try:
             self.cursor.execute('''DELETE FROM video WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO video VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (video_info, video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
-    def voiceSeve(self, voice_info, voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+    def voiceSave(self, voice_info, voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"voice_info={voice_info} | voice_id={voice_id} | voice_path={voice_path} | voice_size={voice_size} | voice_unique_id={voice_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
         try:
             self.cursor.execute('''DELETE FROM voice WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO voice VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (voice_info, voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
-    def documentSeve(self, document_info, document_id, document_path, document_size, document_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+    def documentSave(self, document_info, document_id, document_path, document_size, document_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"document_info={document_info} | document_id={document_id} | document_path={document_path} | document_size={document_size} | document_unique_id={document_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
         try:
             self.cursor.execute('''DELETE FROM document WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO document VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (document_info, document_id, document_path, document_size, document_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
-    def VideoNoteSeve(self, VideoNote_info, VideoNote_id, VideoNote_path, VideoNote_size, VideoNote_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
-        allInfo = str(f"VideoNote_info={VideoNote_info} | VideoNote_id={VideoNote_id} | VideoNote={VideoNote_path} | VideoNote_size={VideoNote_size} | VideoNote_unique_id={VideoNote_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
+    def animationSave(self, animation_info, animation_id, animation_path, animation_size, animation_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"animation_info={animation_info} | animation_id={animation_id} | animation_path={animation_path} | animation_size={animation_size} | animation_unique_id={animation_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
+        try:
+            self.cursor.execute('''DELETE FROM animation WHERE allInfo = %s''',(allInfo,))
+        finally:
+            self.cursor.execute('''INSERT INTO animation VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (animation_info, animation_id, animation_path, animation_size, animation_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
+
+    def VideoNoteSave(self, VideoNote_info, VideoNote_id, VideoNote_path, VideoNote_size, VideoNote_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"VideoNote_info={VideoNote_info} | VideoNote_id={VideoNote_id} | VideoNote_path={VideoNote_path} | VideoNote_size={VideoNote_size} | VideoNote_unique_id={VideoNote_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
         try:
             self.cursor.execute('''DELETE FROM VideoNote WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO VideoNote VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (VideoNote_info, VideoNote_id, VideoNote_path, VideoNote_size, VideoNote_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
+
+    def pollSave(self, poll_id, poll_question, poll_options, poll_correct_option_id, poll_explanation, poll_is_anonymous, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"poll_id={poll_id} | poll_question={poll_question} | poll_options={poll_options} | poll_correct_option_id={poll_correct_option_id} | poll_explanation={poll_explanation} | poll_is_anonymous={poll_is_anonymous} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
+        try:
+            self.cursor.execute('''DELETE FROM poll WHERE allInfo = %s''',(allInfo,))
+        finally:
+            self.cursor.execute('''INSERT INTO poll VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (poll_id, poll_question, poll_options, poll_correct_option_id, poll_explanation, poll_is_anonymous, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
 
 
     def examination(self, user_id, chat_id):
