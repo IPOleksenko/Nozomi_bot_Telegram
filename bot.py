@@ -126,6 +126,8 @@ async def MYSTICKER(message: types.Message):
 async def process_start(message: types.Message):
     info_user(message)
 
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+
     arguments = message.get_args() 
     if arguments != '':
         await message.reply(Weater_message(arguments, message))    
