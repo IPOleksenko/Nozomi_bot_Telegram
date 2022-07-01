@@ -119,6 +119,22 @@ class SQL:
         Author TEXT
         )''')
 
+        self.cursor.execute('''CREATE TABLE IF NOT EXISTS audio (
+        audio_info TEXT, 
+        audio_id TEXT, 
+        audio_path TEXT, 
+        audio_size TEXT, 
+        audio_unique_id TEXT,
+        user_id BIGSERIAL, 
+        user_firstname TEXT, 
+        user_lastname TEXT, 
+        user_username TEXT, 
+        chat_id BIGSERIAL,
+        time TIMESTAMP,
+        allInfo TEXT PRIMARY KEY,
+        Author TEXT
+        )''')
+
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS voice (
         voice_info TEXT, 
         voice_id TEXT, 
@@ -257,6 +273,14 @@ class SQL:
             self.cursor.execute('''DELETE FROM video WHERE allInfo = %s''',(allInfo,))
         finally:
             self.cursor.execute('''INSERT INTO video VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (video_info, video_id, video_path, video_size, video_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
+
+    def audioSave(self, audio_info, audio_id, audio_path, audio_size, audio_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
+        allInfo = str(f"audio_info={audio_info} | audio_id={audio_id} | audio_path={audio_path} | audio_size={audio_size} | audio_unique_id={audio_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")
+        try:
+            self.cursor.execute('''DELETE FROM audio WHERE allInfo = %s''',(allInfo,))
+        finally:
+            self.cursor.execute('''INSERT INTO audio VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)''', (audio_info, audio_id, audio_path, audio_size, audio_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time, allInfo,'IPOleksenko'))
+
 
     def voiceSave(self, voice_info, voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, time):
         allInfo = str(f"voice_info={voice_info} | voice_id={voice_id} | voice_path={voice_path} | voice_size={voice_size} | voice_unique_id={voice_unique_id} | user_id={user_id} | user_firstname={user_firstname} | user_lastname={user_lastname} | user_username={user_username} |chat_id={chat_id} | time={time}")

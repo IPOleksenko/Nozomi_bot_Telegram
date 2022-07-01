@@ -394,6 +394,31 @@ async def document(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
+@dp.message_handler(content_types=['audio'])
+async def audio(message):
+    info_user(message)
+
+    if message.audio is not None:
+        file_id = message.audio.file_id
+
+        audio_info = await bot.get_file(file_id)
+        audio_id = audio_info.file_id
+        audio_path = audio_info.file_path
+        audio_size = audio_info.file_size
+        audio_unique_id = audio_info.file_unique_id
+        
+        user_id=message.from_user.id
+        user_firstname=message.from_user.first_name
+        user_lastname=message.from_user.last_name
+        user_username=message.from_user.username
+        chat_id=message.chat.id
+        datatime= datetime.now()
+        
+        Database_SQL.audioSave(str(audio_info), audio_id, audio_path, audio_size, audio_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+    
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    return
+
 def voice(message, voice_info):
     voice_id = voice_info.file_id
     voice_path = voice_info.file_path
