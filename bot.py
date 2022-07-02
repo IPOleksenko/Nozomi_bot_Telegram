@@ -453,7 +453,7 @@ async def Voice_recognizer(message: types.Message):
         return None
 ###Конвертация файла###
     dest_filename = f'Voice_user\\voice_output.wav'
-    subprocess.run([f'ffmpeg\\bin\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
+    subprocess.run([f'ffmpeg\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
 ###Распознование слов###
     with AudioFile(dest_filename) as source:
         r.adjust_for_ambient_noise(source, duration=0.5)
@@ -463,7 +463,7 @@ async def Voice_recognizer(message: types.Message):
             text = ''.join(text)
             await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
         except UnknownValueError:
-            await message.reply(_('{BAKA}')+('.'))
+            await message.reply(_('{BAKA}'))
 
 
 if __name__ == '__main__':
