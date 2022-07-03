@@ -7,8 +7,12 @@ from aiogram.types import ContentType, Message
 from aiogram.utils import executor
 from aiogram.utils.exceptions import FileIsTooBig
 from aiogram.dispatcher.filters import BoundFilter
-from speech_recognition import AudioFile, Recognizer, UnknownValueError, subprocess
 from random import randrange
+from speech_recognition import Recognizer, AudioFile, UnknownValueError
+import vosk
+import json
+import io
+import subprocess as sp
 
 from config import TOKEN, CHAT_FOR_FORWARD, i18n, _
 from SQL import Database_SQL
@@ -21,6 +25,10 @@ bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(i18n)
 
+models = {
+    "en": vosk.Model("models/en"),
+    "ru": vosk.Model("models/ru")
+}
 
 def Examination(message):
     user_id=message.from_user.id
@@ -51,7 +59,7 @@ def info_user(message):
     user_username=message.from_user.username
     chat_id=message.chat.id
     datatime= datetime.now()
-    Lang = str(message.from_user.locale)
+    Lang = message.from_user.language_code
     
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
     return
@@ -419,7 +427,17 @@ async def audio(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-def voice(message, voice_info):
+
+###распознование текста в аудио###
+@dp.message_handler(content_types=['voice'])
+async def Voice_recognizer(message: types.Message):
+    info_user(message)
+
+    File = await bot.get_file(message.voice.file_id)
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    
+
+    voice_info = await bot.get_file(message.voice.file_id)
     voice_id = voice_info.file_id
     voice_path = voice_info.file_path
     voice_size = voice_info.file_size
@@ -433,37 +451,53 @@ def voice(message, voice_info):
     datatime= datetime.now()
     Database_SQL.voiceSave(str(voice_info), voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
 
-    return
 
-###распознование текста в аудио###
-@dp.message_handler(content_types=['voice'])
-async def Voice_recognizer(message: types.Message):
-    info_user(message)
+    result_text = ""
+    bot_message = await message.reply(_("Think..."))
 
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
-    
-    try:
-        src_filename = 'Voice_user\\voice.ogg'    
-        newFile = await bot.get_file(message.voice.file_id)
-        if message.voice is not None:
-            voice(message, newFile)
-        await newFile.download(src_filename)       
-    except FileIsTooBig:
-        await message.reply(_('{big_file}'))
-        return None
-###Конвертация файла###
-    dest_filename = f'Voice_user\\voice_output.wav'
-    subprocess.run([f'ffmpeg\\ffmpeg.exe', '-i', src_filename, dest_filename, '-y'])
-###Распознование слов###
-    with AudioFile(dest_filename) as source:
-        r.adjust_for_ambient_noise(source, duration=0.5)
-        r.energy_threshold = 300
-        try:
-            text = r.recognize_google(r.record(source), language = str(message.from_user.locale))
-            text = ''.join(text)
-            await message.reply(_('{I_heard}')+(':')+(f'\n"{text}"'))
-        except UnknownValueError:
-            await message.reply(_('{BAKA}'))
+    lang = message.from_user.language_code
+    lang = lang if lang in models.keys() else "en"
+    kaldi = vosk.KaldiRecognizer(models[lang], 48000)
+
+    voice = await message.voice.get_file()
+    input = io.BytesIO()
+    await voice.download(destination_file=input)
+
+    cmd = [
+        "ffmpeg",
+        "-i",
+        "pipe:",
+        "-f",
+        "wav",
+        "-r",
+        "16000",
+        "-acodec",
+        "pcm_s16le",
+        "pipe:",
+    ]
+    proc = sp.Popen(cmd, stdout=sp.PIPE, stdin=sp.PIPE, stderr=sp.PIPE)
+    result_ffmpeg = proc.communicate(input=input.read())[0]
+    proc.wait()
+
+    output = io.BytesIO(result_ffmpeg)
+
+    if kaldi.AcceptWaveform(output.read()):
+        result = kaldi.FinalResult()
+        result_text = json.loads(result)["text"]
+
+    if result_text == "":
+        output.seek(0)
+        with AudioFile(output) as source:
+            r.adjust_for_ambient_noise(source, 0.5)
+            r.energy_threshold = 300
+            try:
+                result_text = r.recognize_google(
+                    r.record(source), language=message.from_user.language_code
+                )
+            except UnknownValueError:
+                result_text = _("Failed to decrypt")
+
+    return await bot_message.edit_text(result_text)
 
 
 if __name__ == '__main__':

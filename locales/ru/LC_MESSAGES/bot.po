@@ -7,17 +7,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-30 17:12+0300\n"
-"PO-Revision-Date: 2022-06-30 17:12+0300\n"
+"POT-Creation-Date: 2022-07-04 00:59+0300\n"
+"PO-Revision-Date: 2022-07-04 01:00+0300\n"
 "Last-Translator: \n"
-"Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: Weather_reaction.py:20
 msgid "Weater_message_1"
@@ -44,17 +45,16 @@ msgstr ""
 "Я не знаю такого города :(\n"
 "Давай посмотрим погоду в другом месте"
 
-#: bot.py:34
+#: bot.py:42
 msgid ""
-"Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
-"chat"
+"Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"
 msgstr ""
 "Привет, я Nozomi! Если хочешь научиться мной пользоваться тебе надо "
 "написать:\n"
 "/start\n"
 " "
 
-#: bot.py:64
+#: bot.py:86
 msgid "help"
 msgstr ""
 "Команда пользователя:\n"
@@ -73,29 +73,33 @@ msgstr ""
 "-Бот переводит голосовые сообщения в текст\n"
 " "
 
-#: bot.py:133
+#: bot.py:166
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "Укажи город\n"
 "/weather <city>\n"
 " "
 
-#: bot.py:389
-msgid "{big_file}"
-msgstr ""
-"Слишком большой файл, голова болит(\n"
-" "
+#: bot.py:456
+msgid "Think..."
+msgstr "Думаю..."
 
-#: bot.py:401
-msgid "{I_heard}"
-msgstr "Я услышала"
-
-#: bot.py:403
-msgid "{BAKA}"
-msgstr ""
-"Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз\n"
-" "
+#: bot.py:498
+msgid "Failed to decrypt"
+msgstr "Не удалось расшифровать"
 
 #~ msgid "{Anonimus_user}"
 #~ msgstr "От кого ты скрываешься"
 
+#~ msgid "{big_file}"
+#~ msgstr ""
+#~ "Слишком большой файл, голова болит(\n"
+#~ " "
+
+#~ msgid "{I_heard}"
+#~ msgstr "Я услышала"
+
+#~ msgid "{BAKA}"
+#~ msgstr ""
+#~ "Слишком сложно, я тебя не понимаю, БАКА, повтори еще раз\n"
+#~ " "

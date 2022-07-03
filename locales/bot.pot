@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-06-30 17:12+0300\n"
+"POT-Creation-Date: 2022-07-04 00:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,29 +37,25 @@ msgstr ""
 msgid "Weater_message_5"
 msgstr ""
 
-#: bot.py:34
+#: bot.py:42
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
 msgstr ""
 
-#: bot.py:64
+#: bot.py:86
 msgid "help"
 msgstr ""
 
-#: bot.py:133
+#: bot.py:166
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 
-#: bot.py:389
-msgid "{big_file}"
+#: bot.py:456
+msgid "Think..."
 msgstr ""
 
-#: bot.py:401
-msgid "{I_heard}"
-msgstr ""
-
-#: bot.py:403
-msgid "{BAKA}"
+#: bot.py:498
+msgid "Failed to decrypt"
 msgstr ""
 
