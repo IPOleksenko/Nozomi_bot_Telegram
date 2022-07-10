@@ -1,23 +1,26 @@
+import io
+import json
+import subprocess as sp
 from datetime import datetime
 from logging import DEBUG, basicConfig
+from random import randrange
 
+import pyaztro
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, Message
 from aiogram.utils import executor
-from random import randrange
-from speech_recognition import Recognizer, AudioFile, UnknownValueError
+from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
-import json
-import io
-import subprocess as sp
 
-from config import TOKEN, CHAT_FOR_FORWARD, i18n, _ , models
+from config import CHAT_FOR_FORWARD, TOKEN, _, i18n, models
+from keyboard import getHoroscopeKeyboard
 from SQL import Database_SQL
 from Weather_reaction import Weater_message
 
-r = Recognizer()
 basicConfig(level=DEBUG)
+
+r = Recognizer()
 storage = MemoryStorage()
 bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
@@ -114,11 +117,15 @@ async def weather(message: types.Message):
         await message.reply(_('{You_didnt_enter_the_city}'))
 
 @dp.message_handler(commands="horoscope")
-async def process_start(message: types.Message):
+async def horoscope(message: types.Message):
     info_user(message)
     message_save(message)
 
-    return
+    args=message.get_args()
+    if not args:
+        await message.reply(_("Which horoscope is interesting?"), reply_markup=getHoroscopeKeyboard)
+        return
+
 
 
 
