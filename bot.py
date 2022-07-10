@@ -5,7 +5,6 @@ from datetime import datetime
 from logging import DEBUG, basicConfig
 from random import randrange
 
-import pyaztro
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, Message
@@ -17,6 +16,7 @@ from config import CHAT_FOR_FORWARD, TOKEN, _, i18n, models
 from keyboard import getHoroscopeKeyboard
 from SQL import Database_SQL
 from Weather_reaction import Weater_message
+from CallBack import *
 
 basicConfig(level=DEBUG)
 
@@ -25,6 +25,10 @@ storage = MemoryStorage()
 bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(i18n)
+
+
+dp.register_callback_query_handler(horoscope_callback_handler)
+
 
 def Examination(message):
     user_id=message.from_user.id
@@ -123,7 +127,7 @@ async def horoscope(message: types.Message):
 
     args=message.get_args()
     if not args:
-        await message.reply(_("Which horoscope is interesting?"), reply_markup=getHoroscopeKeyboard)
+        await message.reply(_("Which horoscope is interesting?"), reply_markup=getHoroscopeKeyboard())
         return
 
 

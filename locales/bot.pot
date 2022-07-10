@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-10 08:48+0300\n"
+"POT-Creation-Date: 2022-07-10 23:20+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,41 +37,37 @@ msgstr ""
 msgid "Weater_message_5"
 msgstr ""
 
-#: bot.py:63
+#: bot.py:68
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
 msgstr ""
 
-#: bot.py:74
+#: bot.py:79
 msgid "help"
 msgstr ""
 
-#: bot.py:116
+#: bot.py:121
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 
-#: bot.py:127
+#: bot.py:130
 msgid "Which horoscope is interesting?"
 msgstr ""
 
-#: bot.py:133
-msgid "There is no such zodiac sign("
-msgstr ""
-
-#: bot.py:191
+#: bot.py:189
 msgid "SENDBYID_NOT_REPLY"
 msgstr ""
 
-#: bot.py:195
+#: bot.py:193
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 
-#: bot.py:494
+#: bot.py:492
 msgid "Think..."
 msgstr ""
 
-#: bot.py:536
+#: bot.py:534
 msgid "Failed to decrypt"
 msgstr ""
 
