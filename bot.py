@@ -5,16 +5,14 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, Message
 from aiogram.utils import executor
-from aiogram.utils.exceptions import FileIsTooBig
-from aiogram.dispatcher.filters import BoundFilter
 from random import randrange
 from speech_recognition import Recognizer, AudioFile, UnknownValueError
-import vosk
+from vosk import KaldiRecognizer
 import json
 import io
 import subprocess as sp
 
-from config import TOKEN, CHAT_FOR_FORWARD, i18n, _
+from config import TOKEN, CHAT_FOR_FORWARD, i18n, _ , models
 from SQL import Database_SQL
 from Weather_reaction import Weater_message
 
@@ -25,11 +23,6 @@ bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(i18n)
 
-models = {
-    "en": vosk.Model("models/en"),
-    "ru": vosk.Model("models/ru")
-}
-
 def Examination(message):
     user_id=message.from_user.id
     chat_id=message.chat.id
@@ -37,20 +30,6 @@ def Examination(message):
     return exam
 
 
-@dp.message_handler(content_types=[ContentType.NEW_CHAT_MEMBERS])
-async def new_members_handler(message: Message):
-    await bot.send_message((message.chat.id), _("Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"))
-
-class MyFilter(BoundFilter):
-    key = 'is_admin'
-
-    def __init__(self, is_admin):
-        self.is_admin = is_admin
-
-    async def check(self, message: types.Message):
-        member = await bot.get_chat_member(message.chat.id, message.from_user.id)
-        return member.is_chat_admin()
-dp.filters_factory.bind(MyFilter)
 
 def info_user(message):
     user_id=message.from_user.id
@@ -63,7 +42,7 @@ def info_user(message):
     
     Database_SQL.insert(user_id, user_firstname, user_lastname, user_username, chat_id, datatime, Lang)
     return
-
+    
 def message_save(message):
     if message.text is not None:
         user_id=message.from_user.id
@@ -74,9 +53,16 @@ def message_save(message):
         datatime= datetime.now()
 
         Database_SQL.messageSave(message.text, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
+
+@dp.message_handler(content_types=[ContentType.NEW_CHAT_MEMBERS])
+async def new_members_handler(message: Message):
+    info_user(message)
+    message_save(message)
+    await bot.send_message((message.chat.id), _("Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"))
+    return
     
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(commands="start")
 async def start(message: types.Message):
     info_user(message)
     message_save(message)
@@ -86,8 +72,8 @@ async def start(message: types.Message):
     await message.reply(_('help'))
     return
 
-@dp.message_handler(commands=['random'])
-async def process_start(message: types.Message):
+@dp.message_handler(commands="random")
+async def random(message: types.Message):
     info_user(message)
     message_save(message)
 
@@ -114,8 +100,32 @@ async def process_start(message: types.Message):
     await message.reply(randrange(min, max, step))
     return 
 
-@dp.message_handler(is_admin=True, commands=['MESSAGE'])
-async def message(message: types.Message):
+@dp.message_handler(commands="weather")
+async def weather(message: types.Message):
+    info_user(message)
+    message_save(message)
+
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+
+    arguments = message.get_args() 
+    if arguments != '':
+        await message.reply(Weater_message(arguments, message))    
+    else:
+        await message.reply(_('{You_didnt_enter_the_city}'))
+
+@dp.message_handler(commands="horoscope")
+async def process_start(message: types.Message):
+    info_user(message)
+    message_save(message)
+
+    return
+
+
+
+
+@dp.message_handler(is_chat_admin=True, commands="MESSAGE")
+@dp.message_handler(chat_type='private', commands="MESSAGE")
+async def MESSAGE(message: types.Message):
     info_user(message)
     message_save(message)
 
@@ -126,7 +136,8 @@ async def message(message: types.Message):
     await bot.send_message(message.chat.id, arguments)
     return
 
-@dp.message_handler(is_admin=True, commands=['KILLSTICKER'])
+@dp.message_handler(is_chat_admin=True, commands="KILLSTICKER")
+@dp.message_handler(chat_type='private', commands="KILLSTICKER")
 async def KILLSTICKER(message: types.Message):
     info_user(message)
     message_save(message)
@@ -140,7 +151,8 @@ async def KILLSTICKER(message: types.Message):
         await message.answer_sticker(r"CAACAgIAAxkBAAEElfViavdiyQmJ3phUbRFDiLqkzBWAuwACvRcAAm7sUUuMK530YMmNUiQE")
     return
 
-@dp.message_handler(is_admin=True, commands=['MYSTICKER'])
+@dp.message_handler(is_chat_admin=True, commands="MYSTICKER")
+@dp.message_handler(chat_type='private', commands="MYSTICKER")
 async def MYSTICKER(message: types.Message):
     info_user(message)
     message_save(message)
@@ -152,30 +164,47 @@ async def MYSTICKER(message: types.Message):
     await message.answer_sticker(arguments)
     return
 
-@dp.message_handler(commands=['weather'])
-async def process_start(message: types.Message):
+@dp.message_handler(is_chat_admin=True, commands="SENDBYID")
+@dp.message_handler(chat_type='private', commands="SENDBYID")
+async def SENDBYID(message: types.Message):
     info_user(message)
     message_save(message)
-
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
-    arguments = message.get_args() 
-    if arguments != '':
-        await message.reply(Weater_message(arguments, message))    
-    else:
-        await message.reply(_('{You_didnt_enter_the_city}'))
+    args = message.get_args().split()
+
+    reply = message.reply_to_message
+    if not reply:
+        await message.reply(_("SENDBYID_NOT_REPLY"))
+        return
+
+    if len(args) == 0:
+        await message.reply(_("SENDBYID_NOT_ID"))
+        return
+        
+    await message.delete()
+
+    if len(args) == 1:
+        await bot.copy_message(args[0], reply.chat.id, reply.message_id)
+    elif len(args) >= 2:
+        if args[1]=="False":
+            await bot.copy_message(args[0], reply.chat.id, reply.message_id, disable_notification = False)
+        elif args[1]=="True":
+            await bot.copy_message(args[0], reply.chat.id, reply.message_id, disable_notification = True)
+    return
 
 
 
-@dp.message_handler(content_types=['text'])
-async def message(message):
+
+@dp.message_handler(content_types="text")
+async def text(message):
     info_user(message)
     message_save(message)
 
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['dice'])
+@dp.message_handler(content_types="dice")
 async def dice(message):
     info_user(message)
 
@@ -195,8 +224,7 @@ async def dice(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-
-@dp.message_handler(content_types=['animation'])
+@dp.message_handler(content_types="animation")
 async def animation(message):
     info_user(message)
 
@@ -219,7 +247,7 @@ async def animation(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['poll'])
+@dp.message_handler(content_types="poll")
 async def poll(message):
     info_user(message)
 
@@ -243,7 +271,7 @@ async def poll(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['sticker'])
+@dp.message_handler(content_types="sticker")
 async def sticker(message):
     info_user(message)
 
@@ -265,7 +293,7 @@ async def sticker(message):
         await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
         return
 
-@dp.message_handler(content_types=['contact'])
+@dp.message_handler(content_types="contact")
 async def contact(message):
     info_user(message)
 
@@ -283,7 +311,7 @@ async def contact(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['location'])
+@dp.message_handler(content_types="location")
 async def location(message):
     info_user(message)
 
@@ -303,7 +331,7 @@ async def location(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return 
 
-@dp.message_handler(content_types=['photo'])
+@dp.message_handler(content_types="photo")
 async def photo(message):
     info_user(message)
 
@@ -328,7 +356,7 @@ async def photo(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['video'])
+@dp.message_handler(content_types="video")
 async def video(message):
     info_user(message)
 
@@ -353,7 +381,7 @@ async def video(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['video_note'])
+@dp.message_handler(content_types="video_note")
 async def VideoNote(message):
     info_user(message)
 
@@ -377,7 +405,7 @@ async def VideoNote(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['document'])
+@dp.message_handler(content_types="document")
 async def document(message):
     info_user(message)
 
@@ -402,7 +430,7 @@ async def document(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-@dp.message_handler(content_types=['audio'])
+@dp.message_handler(content_types="audio")
 async def audio(message):
     info_user(message)
 
@@ -427,16 +455,12 @@ async def audio(message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     return
 
-
-###распознование текста в аудио###
-@dp.message_handler(content_types=['voice'])
+@dp.message_handler(content_types="voice")
 async def Voice_recognizer(message: types.Message):
     info_user(message)
 
-    File = await bot.get_file(message.voice.file_id)
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
     
-
     voice_info = await bot.get_file(message.voice.file_id)
     voice_id = voice_info.file_id
     voice_path = voice_info.file_path
@@ -449,6 +473,7 @@ async def Voice_recognizer(message: types.Message):
     user_username=message.from_user.username
     chat_id=message.chat.id
     datatime= datetime.now()
+
     Database_SQL.voiceSave(str(voice_info), voice_id, voice_path, voice_size, voice_unique_id, user_id, user_firstname, user_lastname, user_username, chat_id, datatime)
 
 
@@ -457,7 +482,7 @@ async def Voice_recognizer(message: types.Message):
 
     lang = message.from_user.language_code
     lang = lang if lang in models.keys() else "en"
-    kaldi = vosk.KaldiRecognizer(models[lang], 48000)
+    kaldi = KaldiRecognizer(models[lang], 48000)
 
     voice = await message.voice.get_file()
     input = io.BytesIO()

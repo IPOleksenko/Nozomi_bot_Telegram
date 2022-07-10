@@ -1,6 +1,7 @@
 from os import getenv
 from aiogram.contrib.middlewares.i18n import I18nMiddleware
 from pathlib import Path
+from vosk import Model
 
 TOKEN = getenv("TOKEN")
 OW_API = getenv("OW_API")
@@ -13,4 +14,9 @@ BASE_DIR = Path(__file__).parent
 LOCALES_DIR = BASE_DIR / 'locales'
 i18n = I18nMiddleware(I18N_DOMAIN, LOCALES_DIR)
 _ = i18n.gettext
+
+models = {
+    "en": Model("models/en"),
+    "ru": Model("models/ru")
+}
 #Author: IPOleksenko
