@@ -9,6 +9,9 @@ DATABASE_URL = getenv("DATABASE_URL")
 
 CHAT_FOR_FORWARD = getenv("CHAT_FOR_FORWARD")
 
+WEBHOOK_HOST = getenv("WEBHOOK_HOST")
+PORT = getenv("PORT", 5555)
+
 I18N_DOMAIN = 'bot'
 BASE_DIR = Path(__file__).parent
 LOCALES_DIR = BASE_DIR / 'locales'

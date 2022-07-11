@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-10 23:20+0300\n"
-"PO-Revision-Date: 2022-07-10 23:20+0300\n"
+"POT-Creation-Date: 2022-07-11 04:29+0300\n"
+"PO-Revision-Date: 2022-07-11 04:55+0300\n"
 "Last-Translator: \n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -65,13 +65,13 @@ msgstr ""
 "\n"
 "Administrator command:\n"
 "/MESSAGE {message} - bot send message\n"
-"/KILLSTICKER {amount} - bot send sticker that heavily loads Telegram\n"
 "/SENDBYID {user or chat ID} - takes and sends the message you have "
 "selected to the specified ID\n"
 "/MYSTICKER {sticker ID}- bot send sticker\n"
 "\n"
 "Also:\n"
-"-Bot translates voice messages into text"
+"-Bot translates voice messages into text\n"
+"-Bot saves some information"
 
 #: bot.py:121
 msgid "{You_didnt_enter_the_city}"
@@ -84,21 +84,21 @@ msgstr ""
 msgid "Which horoscope is interesting?"
 msgstr "Which horoscope is interesting?"
 
-#: bot.py:189
+#: bot.py:173
 msgid "SENDBYID_NOT_REPLY"
 msgstr "You need to reply to this command on the message!"
 
-#: bot.py:193
+#: bot.py:177
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 "You need to specify the ID of the chat or the user who communicated with "
 "me!"
 
-#: bot.py:492
+#: bot.py:476
 msgid "Think..."
 msgstr "Think..."
 
-#: bot.py:534
+#: bot.py:518
 msgid "Failed to decrypt"
 msgstr "Failed to decrypt"
 
