@@ -8,10 +8,13 @@ async def horoscope_callback_handler(call: types.CallbackQuery):
     user_leng=call.from_user.language_code
 
     if user_leng != "en": 
-        await call.answer(GoogleTranslator('en',user_leng).translate(aztro_result), show_alert=True)
-        return
+        aztro_result=GoogleTranslator('en',user_leng).translate(aztro_result)
+        
 
-    await call.answer(aztro_result, show_alert=True)
+    if len(aztro_result)>200:
+        aztro_result=aztro_result[:197]+"..."
+
+    await call.answer((aztro_result), show_alert=True)
     return
 
 #Author: IPOleksenko
