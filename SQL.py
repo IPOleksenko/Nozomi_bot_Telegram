@@ -1,4 +1,4 @@
-from aiogram.types import Message, User
+from aiogram.types import Message, User, Chat
 import psycopg2 as pg
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import SQL, Literal
@@ -171,6 +171,19 @@ class Database:
                 del result[i]["updated_at"]
 
             return set(User(**user) for user in result)
+
+    def get_chats(self) -> set[Chat]:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(
+                """SELECT * FROM chats;"""
+            )
+            result: list[dict] = cursor.fetchall()
+
+            for i in range(len(result)):
+                del result[i]["created_at"]
+                del result[i]["updated_at"]
+
+            return set(Chat(**chat) for chat in result)
 
 
     def save_message(self, message: Message) -> bool:

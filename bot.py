@@ -6,17 +6,18 @@ from random import randrange
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.types import ContentTypes, ContentType, Message
+from aiogram.types import ContentType, ContentTypes, Message
 from aiogram.utils import executor
+from aiogram.utils.executor import start_polling, start_webhook
 from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
-from aiogram.utils.executor import start_polling, start_webhook
 
-from config import CHAT_FOR_FORWARD, TOKEN, _, i18n, models, DATABASE_URL, WEBHOOK_HOST, PORT
+from CallBack import *
+from config import (CHAT_FOR_FORWARD, DATABASE_URL, BOT_OWNER_USER, PORT, TOKEN,
+                    WEBHOOK_HOST, _, i18n, models)
 from keyboard import getHoroscopeKeyboard
 from SQL import Database
 from Weather_reaction import Weater_message
-from CallBack import *
 
 basicConfig(level=DEBUG)
 
@@ -100,8 +101,6 @@ async def horoscope(message: types.Message):
         return
 
 
-
-
 @dp.message_handler(is_chat_admin=True, commands="MESSAGE")
 @dp.message_handler(chat_type='private', commands="MESSAGE")
 async def MESSAGE(message: types.Message):
@@ -148,16 +147,35 @@ async def SENDBYID(message: types.Message):
         
     await message.delete()
 
-    if len(args) == 1:
-        await bot.copy_message(args[0], reply.chat.id, reply.message_id)
-    elif len(args) >= 2:
-        if args[1]=="False":
-            await bot.copy_message(args[0], reply.chat.id, reply.message_id, disable_notification = False)
-        elif args[1]=="True":
-            await bot.copy_message(args[0], reply.chat.id, reply.message_id, disable_notification = True)
+    for x in args:
+        await bot.copy_message(x, reply.chat.id, reply.message_id)
+
+
+@dp.message_handler(chat_type='private', commands="SENDALL")
+async def SENDALL(message: types.Message):
+    db.update_user(message)
+    db.save_message(message)
+
+    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+
+    reply = message.reply_to_message
+
+    args = message.get_args().split()
+
+    if str(message.from_user.id) == BOT_OWNER_USER:
+        if not reply:
+            await message.reply(_("SENDBYID_NOT_REPLY"))
+            return
+        
+        user_info = set(user.id for user in db.get_users())
+        user_info = user_info.union(set(chat.id for chat in db.get_chats()))
+        for id in user_info:
+            await bot.copy_message(id, reply.chat.id, reply.message_id)
+
+            
+    else:
+        await message.reply(_("You are not my owner"))
     return
-
-
 
 
 @dp.message_handler(content_types="voice")
