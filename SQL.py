@@ -3,6 +3,7 @@ import psycopg2 as pg
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import SQL, Literal
 
+
 class Database:
     def __init__(self, dsn: str = None, **kwargs):
         self.conn = pg.connect(
@@ -40,6 +41,7 @@ class Database:
                 );
                 CREATE TABLE IF NOT EXISTS messages (
                     "from" bigint references users(id),
+                    forwarded_from json,
                     chat bigint references chats(id),
                     text varchar(4096),
                     audio json,
@@ -92,13 +94,14 @@ class Database:
                     {language_code},
                     now(),
                     now()
-                ) ON CONFLICT (id) DO UPDATE SET
+                ) ON CONFLICT (id) DO UPDATE
+                SET
                     first_name = {first_name},
                     last_name = {last_name},
                     username = {username},
                     language_code = {language_code},
                     updated_at = now();
-                INSERT INTO chats as c (
+                INSERT INTO chats (
                     id,
                     first_name,
                     last_name,
@@ -117,13 +120,16 @@ class Database:
                     ARRAY[{user_id}],
                     now(),
                     now()
-                ) ON CONFLICT (id) DO UPDATE SET
+                ) ON CONFLICT (id) DO UPDATE
+                SET
                     first_name = {first_name},
                     last_name = {last_name},
                     title = {title},
                     username = {username},
-                    users = array_append(c.users, {user_id}),
                     updated_at = now();
+                UPDATE chats
+                SET users = (SELECT array_agg(distinct e) FROM unnest(users || ARRAY[{user_id}]) e)
+                WHERE NOT users @> ARRAY[CAST({user_id} AS BIGINT)]
             """
                 ).format(
                     user_id=Literal(user_id),
@@ -145,7 +151,7 @@ class Database:
 
         with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute(
-                """SELECT * FROM users WHERE id = %s""", (message.from_user.id,)
+                """SELECT * FROM users WHERE id = %s;""", (message.from_user.id,)
             )
             result = cursor.fetchone()
             del result["created_at"]
@@ -153,13 +159,28 @@ class Database:
 
             return User(**result)
 
+    def get_users(self) -> set[User]:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(
+                """SELECT * FROM users;"""
+            )
+            result: list[dict] = cursor.fetchall()
+
+            for i in range(len(result)):
+                del result[i]["created_at"]
+                del result[i]["updated_at"]
+
+            return set(User(**user) for user in result)
+
+
     def save_message(self, message: Message) -> bool:
         if not isinstance(message, Message):
             raise TypeError("excepted Message, but got", type(message))
 
         with self.conn.cursor() as cursor:
             from_user = message.from_user.id
-            date = message.date.date()
+            forwarded_from = message.forward_from.as_json() if message.forward_from else None
+            date = message.date
             chat = message.chat.id
             text = message.caption if message.caption else message.text
             audio = message.audio.as_json() if message.audio else None
@@ -176,6 +197,7 @@ class Database:
                 """
                 INSERT INTO messages (
                     "from",
+                    forwarded_from,
                     chat,
                     text,
                     audio,
@@ -189,11 +211,12 @@ class Database:
                     location,
                     sended_at
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, TIMESTAMP %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, TIMESTAMP %s)
                 ON CONFLICT DO NOTHING;
             """,
                 (
                     from_user,
+                    forwarded_from,
                     chat,
                     text,
                     audio,
@@ -211,4 +234,17 @@ class Database:
 
             return True
 
-#Author: IPOleksenko
+    #todo: add date of message
+    def get_message(self, type: str) -> list[Message]:
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(
+                """SELECT * FROM messages WHERE %s IS NOT NULL;""", (type,)
+            )
+            result: list[dict] = cursor.fetchall()
+            users = { user.id: user for user in self.get_users() }
+
+            for i in range(len(result)):
+                del result[i]["sended_at"]
+                result[i]["from"] = users[result[i]["from"]]
+
+            return [Message(**message) for message in result]
