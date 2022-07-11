@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-11 04:29+0300\n"
-"PO-Revision-Date: 2022-07-12 00:48+0300\n"
+"POT-Creation-Date: 2022-07-12 02:54+0300\n"
+"PO-Revision-Date: 2022-07-12 02:54+0300\n"
 "Last-Translator: \n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
@@ -44,7 +44,7 @@ msgstr ""
 "Я не знаю такого города :(\n"
 "Давай посмотрим погоду в другом месте"
 
-#: bot.py:68
+#: bot.py:38
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
@@ -54,7 +54,7 @@ msgstr ""
 "/start\n"
 " "
 
-#: bot.py:79
+#: bot.py:49
 msgid "help"
 msgstr ""
 "Команда пользователя:\n"
@@ -78,30 +78,34 @@ msgstr ""
 "-Бот переводит голосовые сообщения в текст\n"
 "-Бот сохраняет некоторую информацию"
 
-#: bot.py:121
+#: bot.py:91
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "Укажи город\n"
 "/weather <city>\n"
 " "
 
-#: bot.py:130
+#: bot.py:100
 msgid "Which horoscope is interesting?"
 msgstr "Какой гороскоп интересен?"
 
-#: bot.py:173
+#: bot.py:141 bot.py:167
 msgid "SENDBYID_NOT_REPLY"
 msgstr "Вам нужно ответить этой командой на сообщение!"
 
-#: bot.py:177
+#: bot.py:145
 msgid "SENDBYID_NOT_ID"
 msgstr "Вам нужно указать ID чата или пользователя который общался со мной!"
 
-#: bot.py:476
+#: bot.py:177
+msgid "You are not my owner"
+msgstr "Вы не мой владелец, я не могу выполнить для вас это("
+
+#: bot.py:190
 msgid "Think..."
 msgstr "Думаю..."
 
-#: bot.py:518
+#: bot.py:232
 msgid "Failed to decrypt"
 msgstr "Не удалось расшифровать"
 
