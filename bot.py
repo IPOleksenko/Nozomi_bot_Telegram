@@ -1,7 +1,7 @@
 import io
 import json
 import subprocess as sp
-from logging import DEBUG, basicConfig
+from logging import DEBUG, basicConfig, error
 from random import randrange
 
 from aiogram import Bot, Dispatcher, types
@@ -124,7 +124,10 @@ async def MYSTICKER(message: types.Message):
 
     await message.delete()
     arguments = message.get_args()
-    await message.answer_sticker(arguments)
+    try:
+        await message.answer_sticker(arguments)
+    except:
+        error("I was unable to send a sticker under the id: "+ arguments)
     return
 
 @dp.message_handler(is_chat_admin=True, commands="SENDBYID")
@@ -148,8 +151,10 @@ async def SENDBYID(message: types.Message):
     await message.delete()
 
     for x in args:
-        await bot.copy_message(x, reply.chat.id, reply.message_id)
-
+        try:
+            await bot.copy_message(x, reply.chat.id, reply.message_id)
+        except:
+            error("I was unable to send a message to the user under the id: "+id)
 
 @dp.message_handler(chat_type='private', commands="SENDALL")
 async def SENDALL(message: types.Message):
@@ -170,8 +175,10 @@ async def SENDALL(message: types.Message):
         user_info = set(user.id for user in db.get_users())
         user_info = user_info.union(set(chat.id for chat in db.get_chats()))
         for id in user_info:
-            await bot.copy_message(id, reply.chat.id, reply.message_id)
-
+            try:
+                await bot.copy_message(id, reply.chat.id, reply.message_id)
+            except:
+                error("I was unable to send a message to the user under the id: "+id)
             
     else:
         await message.reply(_("You are not my owner"))
