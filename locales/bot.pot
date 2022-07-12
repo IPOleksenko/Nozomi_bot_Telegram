@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-12 03:03+0300\n"
+"POT-Creation-Date: 2022-07-12 20:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,23 +55,23 @@ msgstr ""
 msgid "Which horoscope is interesting?"
 msgstr ""
 
-#: bot.py:141 bot.py:167
+#: bot.py:144 bot.py:172
 msgid "SENDBYID_NOT_REPLY"
 msgstr ""
 
-#: bot.py:145
+#: bot.py:148
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 
-#: bot.py:177
+#: bot.py:184
 msgid "You are not my owner"
 msgstr ""
 
-#: bot.py:190
+#: bot.py:197
 msgid "Think..."
 msgstr ""
 
-#: bot.py:232
+#: bot.py:239
 msgid "Failed to decrypt"
 msgstr ""
 

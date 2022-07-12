@@ -130,7 +130,6 @@ async def MYSTICKER(message: types.Message):
         print("/nI was unable to send a sticker under the id: ", arguments, "\n")
     return
 
-@dp.message_handler(is_chat_admin=True, commands="SENDBYID")
 @dp.message_handler(chat_type='private', commands="SENDBYID")
 async def SENDBYID(message: types.Message):
     db.update_user(message)
@@ -140,21 +139,27 @@ async def SENDBYID(message: types.Message):
     args = message.get_args().split()
 
     reply = message.reply_to_message
-    if not reply:
-        await message.reply(_("SENDBYID_NOT_REPLY"))
-        return
+    
+    if str(message.from_user.id) == BOT_OWNER_USER:
 
-    if len(args) == 0:
-        await message.reply(_("SENDBYID_NOT_ID"))
-        return
+        if not reply:
+            await message.reply(_("SENDBYID_NOT_REPLY"))
+            return
+
+        if len(args) == 0:
+            await message.reply(_("SENDBYID_NOT_ID"))
+            return
+
+        await message.delete()
+
+        for x in args:
+            try:
+                await bot.copy_message(x, reply.chat.id, reply.message_id)
+            except:
+                print("\nI was unable to send a message to the user under the id: ", x, "\n")
         
-    await message.delete()
-
-    for x in args:
-        try:
-            await bot.copy_message(x, reply.chat.id, reply.message_id)
-        except:
-            print("\nI was unable to send a message to the user under the id: ", x, "\n")
+    else:
+        await message.reply(_("You are not my owner"))
 
 @dp.message_handler(chat_type='private', commands="SENDALL")
 async def SENDALL(message: types.Message):
@@ -164,8 +169,6 @@ async def SENDALL(message: types.Message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
 
     reply = message.reply_to_message
-
-    args = message.get_args().split()
 
     if str(message.from_user.id) == BOT_OWNER_USER:
         if not reply:

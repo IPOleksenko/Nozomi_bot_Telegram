@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-12 03:03+0300\n"
-"PO-Revision-Date: 2022-07-12 03:02+0300\n"
+"POT-Creation-Date: 2022-07-12 20:46+0300\n"
+"PO-Revision-Date: 2022-07-12 20:45+0300\n"
 "Last-Translator: \n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -57,25 +57,25 @@ msgstr ""
 #: bot.py:49
 msgid "help"
 msgstr ""
-"User command:\n"
+"User commands:\n"
 "/start - command list \n"
 "/weather {city} - bot send weather message\n"
 "/random {start} {end - 1} {step} - generates a random number\n"
 "/horoscope - you can see the horoscope for today\n"
 "\n"
-"Administrator command:\n"
+"Administrator commands:\n"
 "/MESSAGE {message} - bot send message\n"
-"/SENDBYID {User or chat ID, you can specify several separated by spaces} "
-"- takes and sends the message you have selected to the specified ID\n"
 "/MYSTICKER {sticker ID}- bot send sticker\n"
 "\n"
 "Owner bot command:\n"
+"/SENDBYID {User or chat ID, you can specify several separated by spaces} "
+"- takes and sends the message you have selected to the specified ID\n"
 "/SENDALL - receives and sends a message of your choice to all users and "
 "all chats\n"
 "\n"
 "Also:\n"
 "-Bot translates voice messages into text\n"
-"-Bot saves some information"
+"-Bot saves information"
 
 #: bot.py:91
 msgid "{You_didnt_enter_the_city}"
@@ -88,25 +88,25 @@ msgstr ""
 msgid "Which horoscope is interesting?"
 msgstr "Which horoscope is interesting?"
 
-#: bot.py:141 bot.py:167
+#: bot.py:144 bot.py:172
 msgid "SENDBYID_NOT_REPLY"
 msgstr "You need to reply to this command on the message!"
 
-#: bot.py:145
+#: bot.py:148
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 "You need to specify the ID of the chat or the user who communicated with "
 "me!"
 
-#: bot.py:177
+#: bot.py:184
 msgid "You are not my owner"
 msgstr "You are not my owner, I cannot license this to you("
 
-#: bot.py:190
+#: bot.py:197
 msgid "Think..."
 msgstr "Think..."
 
-#: bot.py:232
+#: bot.py:239
 msgid "Failed to decrypt"
 msgstr "Failed to decrypt"
 

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-12 03:03+0300\n"
-"PO-Revision-Date: 2022-07-12 03:01+0300\n"
+"POT-Creation-Date: 2022-07-12 20:46+0300\n"
+"PO-Revision-Date: 2022-07-12 20:46+0300\n"
 "Last-Translator: \n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
@@ -57,27 +57,27 @@ msgstr ""
 #: bot.py:49
 msgid "help"
 msgstr ""
-"Команда пользователя:\n"
+"Команды пользователя:\n"
 "/start - список команд\n"
 "/weather {город} - бот отправляет сообщение о погоде\n"
 "/random  {начальное число} {конечное число - 1} {шаг} — выводит случайно "
 "число\n"
 "/horoscope - можете посмотреть гороскоп на сегодня\n"
 "\n"
-"Команда администратора:\n"
+"Команды администратора:\n"
 "/MESSAGE {сообщение} - бот отправляет сообщение\n"
 "/MYSTICKER {ID стикера} - бот отправляет стикер\n"
+"\n"
+"Команды владельца бота:\n"
 "/SENDBYID {ID пользователя или чата, через пробел можно указать "
 "несколько} - берет и отправляет выбранное вами сообщение по указаному ID"
 "\n"
-"\n"
-"Команды владельца бота:\n"
 "/SENDALL - принимает и отправляет выбранное вами сообщение всем "
 "пользователям и во все чаты\n"
 "\n"
 "Также:\n"
 "-Бот переводит голосовые сообщения в текст\n"
-"-Бот сохраняет некоторую информацию"
+"-Бот сохраняет информацию"
 
 #: bot.py:91
 msgid "{You_didnt_enter_the_city}"
@@ -90,23 +90,23 @@ msgstr ""
 msgid "Which horoscope is interesting?"
 msgstr "Какой гороскоп интересен?"
 
-#: bot.py:141 bot.py:167
+#: bot.py:144 bot.py:172
 msgid "SENDBYID_NOT_REPLY"
 msgstr "Вам нужно ответить этой командой на сообщение!"
 
-#: bot.py:145
+#: bot.py:148
 msgid "SENDBYID_NOT_ID"
 msgstr "Вам нужно указать ID чата или пользователя который общался со мной!"
 
-#: bot.py:177
+#: bot.py:184
 msgid "You are not my owner"
 msgstr "Вы не мой владелец, я не могу выполнить для вас это("
 
-#: bot.py:190
+#: bot.py:197
 msgid "Think..."
 msgstr "Думаю..."
 
-#: bot.py:232
+#: bot.py:239
 msgid "Failed to decrypt"
 msgstr "Не удалось расшифровать"
 
