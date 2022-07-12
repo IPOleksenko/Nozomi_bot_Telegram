@@ -1,7 +1,7 @@
 import io
 import json
 import subprocess as sp
-from logging import DEBUG, basicConfig, error
+from logging import DEBUG, basicConfig
 from random import randrange
 
 from aiogram import Bot, Dispatcher, types
@@ -13,8 +13,8 @@ from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
 
 from CallBack import *
-from config import (CHAT_FOR_FORWARD, DATABASE_URL, BOT_OWNER_USER, PORT, TOKEN,
-                    WEBHOOK_HOST, _, i18n, models)
+from config import (BOT_OWNER_USER, CHAT_FOR_FORWARD, DATABASE_URL, PORT,
+                    TOKEN, WEBHOOK_HOST, _, i18n, models)
 from keyboard import getHoroscopeKeyboard
 from SQL import Database
 from Weather_reaction import Weater_message
@@ -127,7 +127,7 @@ async def MYSTICKER(message: types.Message):
     try:
         await message.answer_sticker(arguments)
     except:
-        error("I was unable to send a sticker under the id: "+ arguments)
+        print("/nI was unable to send a sticker under the id: ", arguments, "\n")
     return
 
 @dp.message_handler(is_chat_admin=True, commands="SENDBYID")
@@ -154,7 +154,7 @@ async def SENDBYID(message: types.Message):
         try:
             await bot.copy_message(x, reply.chat.id, reply.message_id)
         except:
-            error("I was unable to send a message to the user under the id: "+id)
+            print("\nI was unable to send a message to the user under the id: ", x, "\n")
 
 @dp.message_handler(chat_type='private', commands="SENDALL")
 async def SENDALL(message: types.Message):
@@ -178,7 +178,7 @@ async def SENDALL(message: types.Message):
             try:
                 await bot.copy_message(id, reply.chat.id, reply.message_id)
             except:
-                error("I was unable to send a message to the user under the id: "+id)
+                print("\nI was unable to send a message to the user under the id: ", id, "\n")
             
     else:
         await message.reply(_("You are not my owner"))
