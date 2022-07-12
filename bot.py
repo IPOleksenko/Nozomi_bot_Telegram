@@ -110,8 +110,15 @@ async def MESSAGE(message: types.Message):
     await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
         
     await bot.delete_message(message.chat.id, message.message_id)
+    
     arguments = message.get_args()
-    await bot.send_message(message.chat.id, arguments)
+    reply = message.reply_to_message
+    
+    if not reply:
+        await bot.send_message(message.chat.id, arguments)
+    else:
+        await bot.send_message(message.chat.id, arguments, reply_to_message_id=reply.message_id)
+
     return
 
 @dp.message_handler(is_chat_admin=True, commands="MYSTICKER")
@@ -124,8 +131,13 @@ async def MYSTICKER(message: types.Message):
 
     await message.delete()
     arguments = message.get_args()
+    reply = message.reply_to_message
+
     try:
-        await message.answer_sticker(arguments)
+        if not reply:
+            await bot.send_sticker(message.chat.id, arguments)
+        else:
+            await bot.send_sticker(message.chat.id, arguments, reply_to_message_id=reply.message_id)
     except:
         print("/nI was unable to send a sticker under the id: ", arguments, "\n")
     return
@@ -149,8 +161,6 @@ async def SENDBYID(message: types.Message):
         if len(args) == 0:
             await message.reply(_("SENDBYID_NOT_ID"))
             return
-
-        await message.delete()
 
         for x in args:
             try:
