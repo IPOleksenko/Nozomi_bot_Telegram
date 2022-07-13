@@ -1,13 +1,12 @@
 import io
 import json
 import subprocess as sp
-from logging import DEBUG, basicConfig
+from logging import DEBUG, basicConfig, log
 from random import randrange
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, ContentTypes, Message
-from aiogram.utils import executor
 from aiogram.utils.executor import start_polling, start_webhook
 from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
@@ -121,27 +120,6 @@ async def MESSAGE(message: types.Message):
 
     return
 
-@dp.message_handler(is_chat_admin=True, commands="MYSTICKER")
-@dp.message_handler(chat_type='private', commands="MYSTICKER")
-async def MYSTICKER(message: types.Message):
-    db.update_user(message)
-    db.save_message(message)
-
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
-
-    await message.delete()
-    arguments = message.get_args()
-    reply = message.reply_to_message
-
-    try:
-        if not reply:
-            await bot.send_sticker(message.chat.id, arguments)
-        else:
-            await bot.send_sticker(message.chat.id, arguments, reply_to_message_id=reply.message_id)
-    except:
-        print("/nI was unable to send a sticker under the id: ", arguments, "\n")
-    return
-
 @dp.message_handler(chat_type='private', commands="SENDBYID")
 async def SENDBYID(message: types.Message):
     db.update_user(message)
@@ -166,7 +144,7 @@ async def SENDBYID(message: types.Message):
             try:
                 await bot.copy_message(x, reply.chat.id, reply.message_id)
             except:
-                print("\nI was unable to send a message to the user under the id: ", x, "\n")
+                log(-1, "\nI was unable to send a message to the user under the id: {x}\n")
         
     else:
         await message.reply(_("You are not my owner"))
@@ -185,13 +163,13 @@ async def SENDALL(message: types.Message):
             await message.reply(_("SENDBYID_NOT_REPLY"))
             return
         
-        user_info = set(user.id for user in db.get_users())
-        user_info = user_info.union(set(chat.id for chat in db.get_chats()))
-        for id in user_info:
+        chat_info = set(user.id for user in db.get_chats())
+
+        for id in chat_info:
             try:
                 await bot.copy_message(id, reply.chat.id, reply.message_id)
             except:
-                print("\nI was unable to send a message to the user under the id: ", id, "\n")
+                log(-1, "\nI was unable to send a message to the user under the id: {id}\n")
             
     else:
         await message.reply(_("You are not my owner"))

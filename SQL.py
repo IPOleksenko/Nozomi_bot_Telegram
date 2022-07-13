@@ -129,7 +129,7 @@ class Database:
                     updated_at = now();
                 UPDATE chats
                 SET users = (SELECT array_agg(distinct e) FROM unnest(users || ARRAY[{user_id}]) e)
-                WHERE NOT users @> ARRAY[CAST({user_id} AS BIGINT)]
+                WHERE NOT users @> ARRAY[CAST({user_id} AS BIGINT)] AND id = {chat_id}
             """
                 ).format(
                     user_id=Literal(user_id),
