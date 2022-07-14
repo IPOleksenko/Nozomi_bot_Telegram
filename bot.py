@@ -1,10 +1,10 @@
 import io
 import json
 import subprocess as sp
-from logging import DEBUG, basicConfig, log
+from logging import DEBUG, basicConfig, error
 from random import randrange
 
-from aiogram import Bot, Dispatcher, types
+from aiogram import Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, ContentTypes, Message
 from aiogram.utils.executor import start_polling, start_webhook
@@ -13,7 +13,7 @@ from vosk import KaldiRecognizer
 
 from CallBack import *
 from config import (BOT_OWNER_USER, CHAT_FOR_FORWARD, DATABASE_URL, PORT,
-                    TOKEN, WEBHOOK_HOST, _, i18n, models)
+                    TOKEN, WEBHOOK_HOST, _, bot, i18n, models)
 from keyboard import getHoroscopeKeyboard
 from SQL import Database
 from Weather_reaction import Weater_message
@@ -22,7 +22,6 @@ basicConfig(level=DEBUG)
 
 r = Recognizer()
 storage = MemoryStorage()
-bot = Bot(TOKEN)
 dp = Dispatcher(bot, storage=storage)
 dp.middleware.setup(i18n)
 db = Database(dsn=DATABASE_URL)
@@ -144,7 +143,7 @@ async def SENDBYID(message: types.Message):
             try:
                 await bot.copy_message(x, reply.chat.id, reply.message_id)
             except:
-                log(-1, "\nI was unable to send a message to the user under the id: {x}\n")
+                error("\nI was unable to send a message to the user under the id: {x}\n".format(x=x))
         
     else:
         await message.reply(_("You are not my owner"))
@@ -169,7 +168,7 @@ async def SENDALL(message: types.Message):
             try:
                 await bot.copy_message(id, reply.chat.id, reply.message_id)
             except:
-                log(-1, "\nI was unable to send a message to the user under the id: {id}\n")
+                error("\nI was unable to send a message to the user under the id: {id}\n".format(id=id))
             
     else:
         await message.reply(_("You are not my owner"))

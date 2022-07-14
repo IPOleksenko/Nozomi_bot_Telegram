@@ -1,12 +1,14 @@
 from os import getenv
-from aiogram.contrib.middlewares.i18n import I18nMiddleware
 from pathlib import Path
+
+from aiogram import Bot
+from aiogram.contrib.middlewares.i18n import I18nMiddleware
 from vosk import Model
 
 TOKEN = getenv("TOKEN")
 OW_API = getenv("OW_API")
 DATABASE_URL = getenv("DATABASE_URL")
-
+bot = Bot(TOKEN)
 CHAT_FOR_FORWARD = getenv("CHAT_FOR_FORWARD")
 
 BOT_OWNER_USER = getenv("BOT_OWNER_USER")

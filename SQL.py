@@ -261,6 +261,3 @@ class Database:
                 result[i]["from"] = users[result[i]["from"]]
 
             return [Message(**message) for message in result]
-
-    def __del__(self):
-        self.conn.close()
