@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-13 10:14+0300\n"
-"PO-Revision-Date: 2022-07-13 10:14+0300\n"
+"POT-Creation-Date: 2022-07-15 01:58+0300\n"
+"PO-Revision-Date: 2022-07-15 01:57+0300\n"
 "Last-Translator: \n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
+
+#: CallBack.py:16 bot.py:112
+msgid "Which horoscope is interesting?"
+msgstr "Which horoscope is interesting?"
 
 #: Weather_reaction.py:20
 msgid "Weater_message_1"
@@ -45,7 +49,7 @@ msgstr ""
 "I don't know a city like this :(\n"
 "Why don't you check the weather forecast somewhere else"
 
-#: bot.py:37
+#: bot.py:52
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
@@ -54,7 +58,7 @@ msgstr ""
 "/start\n"
 " "
 
-#: bot.py:48
+#: bot.py:61
 msgid "help"
 msgstr ""
 "User commands:\n"
@@ -71,41 +75,46 @@ msgstr ""
 "- takes and sends the message you have selected to the specified ID\n"
 "/SENDALL - receives and sends a message of your choice to all users and "
 "all chats\n"
+"/DELETE {group ID} {message ID} - deletes the message to which you "
+"replied with this command\n"
+"/BAN {group ID} {user ID} - blocks the user in the group to whom you "
+"answered with this command or specified the group ID and user ID\n"
+"/UNBAN {Group ID} {User ID} - unbans the user in the group to whom you "
+"responded with this command or specified a group ID and user ID\n"
+"\n"
 "\n"
 "Also:\n"
 "-Bot translates voice messages into text\n"
-"-Bot saves information"
+"-Bot saves information\n"
+"-The owner of the bot will be added to the administrators when joining "
+"the group"
 
-#: bot.py:90
+#: bot.py:102
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "You didn't enter the city.\n"
 "Example: /weather <city>\n"
 " "
 
-#: bot.py:99
-msgid "Which horoscope is interesting?"
-msgstr "Which horoscope is interesting?"
-
-#: bot.py:136 bot.py:163
+#: bot.py:146 bot.py:173
 msgid "SENDBYID_NOT_REPLY"
 msgstr "You need to reply to this command on the message!"
 
-#: bot.py:140
+#: bot.py:150
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 "You need to specify the ID of the chat or the user who communicated with "
 "me!"
 
-#: bot.py:150 bot.py:175
+#: bot.py:160 bot.py:185
 msgid "You are not my owner"
 msgstr "You are not my owner, I cannot license this to you("
 
-#: bot.py:188
+#: bot.py:253
 msgid "Think..."
 msgstr "Think..."
 
-#: bot.py:230
+#: bot.py:295
 msgid "Failed to decrypt"
 msgstr "Failed to decrypt"
 

@@ -26,6 +26,7 @@ class Database:
                     last_name varchar(64),
                     username varchar(64) unique,
                     language_code varchar(3),
+                    from_user json,
                     created_at timestamp,
                     updated_at timestamp
                 );
@@ -36,12 +37,14 @@ class Database:
                     title varchar(64),
                     username varchar(64),
                     users bigint[] default '{}',
+                    chat json,
                     created_at timestamp,
                     updated_at timestamp
                 );
                 CREATE TABLE IF NOT EXISTS messages (
                     "from" bigint references users(id),
                     forwarded_from json,
+                    message_id bigint,
                     chat bigint references chats(id),
                     text varchar(4096),
                     audio json,
@@ -53,6 +56,7 @@ class Database:
                     voice json,
                     contact json,
                     location json,
+                    message json,
                     sended_at timestamp
                 );
             """
@@ -65,11 +69,13 @@ class Database:
         with self.conn.cursor() as cursor:
             user_id = message.from_user.id
             chat_id = message.chat.id
+            chat = message.chat.as_json() if message.chat else None
             is_bot = message.from_user.is_bot
             first_name = message.from_user.first_name
             last_name = message.from_user.last_name
             username = message.from_user.username
             language_code = message.from_user.language_code
+            from_user = message.from_user.as_json() if message.from_user else None
             title = message.chat.title
 
             cursor.execute(
@@ -82,6 +88,7 @@ class Database:
                     last_name,
                     username,
                     language_code,
+                    from_user,
                     created_at,
                     updated_at
                 )
@@ -92,6 +99,7 @@ class Database:
                     {last_name},
                     {username},
                     {language_code},
+                    {from_user},
                     now(),
                     now()
                 ) ON CONFLICT (id) DO UPDATE
@@ -100,6 +108,7 @@ class Database:
                     last_name = {last_name},
                     username = {username},
                     language_code = {language_code},
+                    from_user = {from_user},
                     updated_at = now();
                 INSERT INTO chats (
                     id,
@@ -108,6 +117,7 @@ class Database:
                     title,
                     username,
                     users,
+                    chat,
                     created_at,
                     updated_at
                 )
@@ -118,6 +128,7 @@ class Database:
                     {title},
                     {username},
                     ARRAY[{user_id}],
+                    {chat},
                     now(),
                     now()
                 ) ON CONFLICT (id) DO UPDATE
@@ -126,6 +137,7 @@ class Database:
                     last_name = {last_name},
                     title = {title},
                     username = {username},
+                    chat = {chat},
                     updated_at = now();
                 UPDATE chats
                 SET users = (SELECT array_agg(distinct e) FROM unnest(users || ARRAY[{user_id}]) e)
@@ -134,12 +146,14 @@ class Database:
                 ).format(
                     user_id=Literal(user_id),
                     chat_id=Literal(chat_id),
+                    chat=Literal(chat),
                     is_bot=Literal(is_bot),
                     first_name=Literal(first_name),
                     last_name=Literal(last_name),
                     title=Literal(title),
                     username=Literal(username),
                     language_code=Literal(language_code),
+                    from_user=Literal(from_user),
                 )
             )
 
@@ -193,6 +207,7 @@ class Database:
         with self.conn.cursor() as cursor:
             from_user = message.from_user.id
             forwarded_from = message.forward_from.as_json() if message.forward_from else None
+            message_id = message.message_id if message.message_id else None
             date = message.date
             chat = message.chat.id
             text = message.caption if message.caption else message.text
@@ -205,12 +220,14 @@ class Database:
             voice = message.voice.as_json() if message.voice else None
             contact = message.contact.as_json() if message.contact else None
             location = message.location.as_json() if message.location else None
+            message = message.as_json() if message else None
 
             cursor.execute(
                 """
                 INSERT INTO messages (
                     "from",
                     forwarded_from,
+                    message_id,
                     chat,
                     text,
                     audio,
@@ -222,14 +239,16 @@ class Database:
                     voice,
                     contact,
                     location,
+                    message,
                     sended_at
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, TIMESTAMP %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, TIMESTAMP %s)
                 ON CONFLICT DO NOTHING;
             """,
                 (
                     from_user,
                     forwarded_from,
+                    message_id,
                     chat,
                     text,
                     audio,
@@ -241,6 +260,7 @@ class Database:
                     voice,
                     contact,
                     location,
+                    message,
                     date,
                 ),
             )

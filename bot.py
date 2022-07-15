@@ -12,7 +12,7 @@ from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
 
 from CallBack import *
-from config import (BOT_OWNER_USER, CHAT_FOR_FORWARD, DATABASE_URL, PORT,
+from config import (BOT_OWNER_USER, FOR_FORWARD, DATABASE_URL, PORT,
                     TOKEN, WEBHOOK_HOST, _, bot, i18n, models)
 from keyboard import getHoroscopeKeyboard
 from SQL import Database
@@ -28,31 +28,45 @@ db = Database(dsn=DATABASE_URL)
 
 dp.register_callback_query_handler(horoscope_callback_handler)
 
-
 @dp.message_handler(content_types=[ContentType.NEW_CHAT_MEMBERS])
 async def new_members_handler(message: Message):
     db.update_user(message)
     db.save_message(message)
-    await bot.send_message((message.chat.id), _("Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"))
-    return
-    
+
+    if str(message.from_user.id) == BOT_OWNER_USER:
+        try:
+            return await message.chat.promote(
+			user_id=message.from_user.id,
+            is_anonymous=False,
+			can_change_info=True,
+            can_post_messages=True,
+            can_edit_messages=True,
+            can_delete_messages=True,
+            can_invite_users=True,
+            can_restrict_members=True,
+            can_pin_messages=True,
+            can_promote_members=True,)
+        except:
+            return error("\nI can't make it an admin(\n")
+
+    return await bot.send_message((message.chat.id), _("Hello, I'm Nozomi! If you wanna start using me – send a /start in this chat"))
 
 @dp.message_handler(commands="start")
 async def start(message: types.Message):
     db.update_user(message)
     db.save_message(message)
 
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
-    await message.reply(_('help'))
-    return
+    return await message.reply(_('help'))
+
 
 @dp.message_handler(commands="random")
 async def random(message: types.Message):
     db.update_user(message)
     db.save_message(message)
 
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     args = message.get_args().split()
     min = 1
@@ -72,31 +86,30 @@ async def random(message: types.Message):
     if step < 1:
         step = 1
 
-    await message.reply(randrange(min, max, step))
-    return 
+    return await message.reply(randrange(min, max, step)) 
 
 @dp.message_handler(commands="weather")
 async def weather(message: types.Message):
     db.update_user(message)
     db.save_message(message)
 
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     arguments = message.get_args() 
     if arguments != '':
-        await message.reply(Weater_message(arguments, message))    
+        return await message.reply(Weater_message(arguments, message))    
     else:
-        await message.reply(_('{You_didnt_enter_the_city}'))
+        return await message.reply(_('{You_didnt_enter_the_city}'))
 
 @dp.message_handler(commands="horoscope")
 async def horoscope(message: types.Message):
     db.update_user(message)
     db.save_message(message)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     args=message.get_args()
     if not args:
-        await message.reply(_("Which horoscope is interesting?"), reply_markup=getHoroscopeKeyboard())
-        return
+        return await message.reply(_("Which horoscope is interesting?"), reply_markup=getHoroscopeKeyboard())
 
 
 @dp.message_handler(is_chat_admin=True, commands="MESSAGE")
@@ -104,26 +117,25 @@ async def horoscope(message: types.Message):
 async def MESSAGE(message: types.Message):
     db.update_user(message)
     db.save_message(message)
-
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
-        
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
     await bot.delete_message(message.chat.id, message.message_id)
     
     arguments = message.get_args()
     reply = message.reply_to_message
     
-    if not reply:
-        await bot.send_message(message.chat.id, arguments)
-    else:
-        await bot.send_message(message.chat.id, arguments, reply_to_message_id=reply.message_id)
-
-    return
+    try:
+        if not reply:
+            return await bot.send_message(message.chat.id, arguments)
+        else:
+            return await bot.send_message(message.chat.id, arguments, reply_to_message_id=reply.message_id)
+    except:
+        error("\nI couldn't send a message or you didn't tell me what to send\n")
 
 @dp.message_handler(chat_type='private', commands="SENDBYID")
 async def SENDBYID(message: types.Message):
     db.update_user(message)
     db.save_message(message)
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     args = message.get_args().split()
 
@@ -146,14 +158,14 @@ async def SENDBYID(message: types.Message):
                 error("\nI was unable to send a message to the user under the id: {x}\n".format(x=x))
         
     else:
-        await message.reply(_("You are not my owner"))
+        return await message.reply(_("You are not my owner"))
 
 @dp.message_handler(chat_type='private', commands="SENDALL")
 async def SENDALL(message: types.Message):
     db.update_user(message)
     db.save_message(message)
 
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     reply = message.reply_to_message
 
@@ -171,16 +183,71 @@ async def SENDALL(message: types.Message):
                 error("\nI was unable to send a message to the user under the id: {id}\n".format(id=id))
             
     else:
-        await message.reply(_("You are not my owner"))
-    return
+        return await message.reply(_("You are not my owner"))
 
+@dp.message_handler(commands="DELETE")
+async def DELETE(message: types.Message):
+    args = (message.get_args()).split()
+    reply = message.reply_to_message
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.delete_message(message.chat.id, message.message_id)
+    db.update_user(message)
+    db.save_message(message)
+
+    
+    if str(message.from_user.id) == BOT_OWNER_USER:
+        try:
+            if len(args) < 2:
+                return await bot.delete_message(reply.chat.id, reply.message_id)
+            else:
+                return await bot.delete_message(args[0], args[1])
+        except:
+            return error("\nCan't delete this post or you didn't say what to delete(\n")
+
+@dp.message_handler(commands="BAN")
+async def BAN(message: types.Message):
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.delete_message(message.chat.id, message.message_id)
+    db.update_user(message)
+    db.save_message(message)
+
+    args = (message.get_args()).split()
+    
+    if str(message.from_user.id) == BOT_OWNER_USER:
+        try:
+            if len(args) < 2:
+                reply = message.reply_to_message
+                return await bot.ban_chat_member(reply.chat.id, reply.from_user.id)
+            else:
+                return await bot.ban_chat_member(args[0], args[1])
+        except:
+            return error("\nI was unable to block this user\n")
+
+@dp.message_handler(commands="UNBAN")
+async def UNBAN(message: types.Message):
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.delete_message(message.chat.id, message.message_id)
+    db.update_user(message)
+    db.save_message(message)
+
+    args = (message.get_args()).split()
+    
+    if str(message.from_user.id) == BOT_OWNER_USER:
+        try:
+            if len(args) < 2:
+                reply = message.reply_to_message
+                return await bot.unban_chat_member(reply.chat.id, reply.from_user.id)
+            else:
+                return await bot.unban_chat_member(args[0], args[1])
+        except:
+            return error("\nI was unable to unblock this user\n")
 
 @dp.message_handler(content_types="voice")
 async def Voice_recognizer(message: types.Message):
     db.update_user(message)
     db.save_message(message)
 
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
     
 
     result_text = ""
@@ -229,13 +296,13 @@ async def Voice_recognizer(message: types.Message):
                 result_text = _("Failed to decrypt")
 
     return await bot_message.edit_text(result_text)
-
+    
 
 @dp.message_handler(content_types=ContentTypes.all())
 async def handle_all(message: Message):
     db.update_user(message)
     db.save_message(message)
-    await bot.forward_message(CHAT_FOR_FORWARD, message.chat.id, message.message_id)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     return True
 

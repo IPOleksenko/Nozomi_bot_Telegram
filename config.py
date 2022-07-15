@@ -6,10 +6,10 @@ from aiogram.contrib.middlewares.i18n import I18nMiddleware
 from vosk import Model
 
 TOKEN = getenv("TOKEN")
+bot = Bot(TOKEN)
 OW_API = getenv("OW_API")
 DATABASE_URL = getenv("DATABASE_URL")
-bot = Bot(TOKEN)
-CHAT_FOR_FORWARD = getenv("CHAT_FOR_FORWARD")
+FOR_FORWARD = getenv("FOR_FORWARD")
 
 BOT_OWNER_USER = getenv("BOT_OWNER_USER")
 
