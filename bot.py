@@ -11,11 +11,13 @@ from aiogram.utils.executor import start_polling, start_webhook
 from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
 
-from CallBack import *
-from config import (BOT_OWNER_USER, FOR_FORWARD, DATABASE_URL, PORT,
-                    TOKEN, WEBHOOK_HOST, _, bot, i18n, models)
+from call_back import *
+from config import (BOT_OWNER_USER, FOR_FORWARD, PORT, TOKEN, WEBHOOK_HOST, _,
+                    i18n, models)
+from donate import *
 from keyboard import getHoroscopeKeyboard
-from SQL import Database
+from middleware import *
+from SQL import db
 from Weather_reaction import Weater_message
 
 basicConfig(level=DEBUG)
@@ -23,15 +25,23 @@ basicConfig(level=DEBUG)
 r = Recognizer()
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
+
+
 dp.middleware.setup(i18n)
-db = Database(dsn=DATABASE_URL)
+dp.middleware.setup(MediaGroupMiddleware())
 
 dp.register_callback_query_handler(horoscope_callback_handler)
+dp.register_message_handler(cmd_buy, commands="donate")
+dp.register_callback_query_handler(shipping, lambda query: True)
+dp.register_callback_query_handler(checkout, lambda query: True)
+dp.register_message_handler(got_payment, content_types=ContentTypes.SUCCESSFUL_PAYMENT)
+
 
 @dp.message_handler(content_types=[ContentType.NEW_CHAT_MEMBERS])
 async def new_members_handler(message: Message):
     db.update_user(message)
     db.save_message(message)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     if str(message.from_user.id) == BOT_OWNER_USER:
         try:
@@ -55,7 +65,6 @@ async def new_members_handler(message: Message):
 async def start(message: types.Message):
     db.update_user(message)
     db.save_message(message)
-
     await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     return await message.reply(_('help'))
@@ -65,7 +74,6 @@ async def start(message: types.Message):
 async def random(message: types.Message):
     db.update_user(message)
     db.save_message(message)
-
     await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     args = message.get_args().split()
@@ -92,7 +100,6 @@ async def random(message: types.Message):
 async def weather(message: types.Message):
     db.update_user(message)
     db.save_message(message)
-
     await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
     arguments = message.get_args() 
@@ -121,15 +128,11 @@ async def MESSAGE(message: types.Message):
     await bot.delete_message(message.chat.id, message.message_id)
     
     arguments = message.get_args()
-    reply = message.reply_to_message
     
     try:
-        if not reply:
-            return await bot.send_message(message.chat.id, arguments)
-        else:
-            return await bot.send_message(message.chat.id, arguments, reply_to_message_id=reply.message_id)
+        return await bot.send_message(message.chat.id, arguments)
     except:
-        error("\nI couldn't send a message or you didn't tell me what to send\n")
+        return error("\nI couldn't send a message\n")
 
 @dp.message_handler(chat_type='private', commands="SENDBYID")
 async def SENDBYID(message: types.Message):
@@ -144,18 +147,18 @@ async def SENDBYID(message: types.Message):
     if str(message.from_user.id) == BOT_OWNER_USER:
 
         if not reply:
-            await message.reply(_("SENDBYID_NOT_REPLY"))
-            return
+            return await message.reply(_("SENDBYID_NOT_REPLY"))
+            
 
         if len(args) == 0:
-            await message.reply(_("SENDBYID_NOT_ID"))
-            return
+            return await message.reply(_("SENDBYID_NOT_ID"))
+            
 
         for x in args:
             try:
-                await bot.copy_message(x, reply.chat.id, reply.message_id)
+                return await bot.copy_message(x, reply.chat.id, reply.message_id)
             except:
-                error("\nI was unable to send a message to the user under the id: {x}\n".format(x=x))
+                return error("\nI was unable to send a message to the user under the id: {x}\n".format(x=x))
         
     else:
         return await message.reply(_("You are not my owner"))
@@ -164,15 +167,13 @@ async def SENDBYID(message: types.Message):
 async def SENDALL(message: types.Message):
     db.update_user(message)
     db.save_message(message)
-
     await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
-
     reply = message.reply_to_message
 
     if str(message.from_user.id) == BOT_OWNER_USER:
         if not reply:
-            await message.reply(_("SENDBYID_NOT_REPLY"))
-            return
+            return await message.reply(_("SENDBYID_NOT_REPLY"))
+            
         
         chat_info = set(user.id for user in db.get_chats())
 
@@ -180,20 +181,21 @@ async def SENDALL(message: types.Message):
             try:
                 await bot.copy_message(id, reply.chat.id, reply.message_id)
             except:
-                error("\nI was unable to send a message to the user under the id: {id}\n".format(id=id))
+                return error("\nI was unable to send a message to the user under the id: {id}\n".format(id=id))
             
     else:
         return await message.reply(_("You are not my owner"))
 
 @dp.message_handler(commands="DELETE")
 async def DELETE(message: types.Message):
-    args = (message.get_args()).split()
-    reply = message.reply_to_message
-    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
-    await bot.delete_message(message.chat.id, message.message_id)
     db.update_user(message)
     db.save_message(message)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
+    args = (message.get_args()).split()
+    reply = message.reply_to_message
+    
+    await bot.delete_message(message.chat.id, message.message_id)
     
     if str(message.from_user.id) == BOT_OWNER_USER:
         try:
@@ -206,10 +208,11 @@ async def DELETE(message: types.Message):
 
 @dp.message_handler(commands="BAN")
 async def BAN(message: types.Message):
-    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
-    await bot.delete_message(message.chat.id, message.message_id)
     db.update_user(message)
     db.save_message(message)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+
+    await bot.delete_message(message.chat.id, message.message_id)
 
     args = (message.get_args()).split()
     
@@ -225,10 +228,11 @@ async def BAN(message: types.Message):
 
 @dp.message_handler(commands="UNBAN")
 async def UNBAN(message: types.Message):
-    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
-    await bot.delete_message(message.chat.id, message.message_id)
     db.update_user(message)
     db.save_message(message)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+    
+    await bot.delete_message(message.chat.id, message.message_id)
 
     args = (message.get_args()).split()
     
@@ -241,6 +245,7 @@ async def UNBAN(message: types.Message):
                 return await bot.unban_chat_member(args[0], args[1])
         except:
             return error("\nI was unable to unblock this user\n")
+
 
 @dp.message_handler(content_types="voice")
 async def Voice_recognizer(message: types.Message):
@@ -298,13 +303,31 @@ async def Voice_recognizer(message: types.Message):
     return await bot_message.edit_text(result_text)
     
 
-@dp.message_handler(content_types=ContentTypes.all())
+@dp.message_handler(is_media_group=True, content_types=types.ContentType.ANY)
+async def handle_all_media(message: types.Message, media_album: list[types.Message]):
+    media_group = types.MediaGroup()
+
+    for media in media_album:
+        db.update_user(media)
+        db.save_message(media)
+
+        if media.photo:
+            file_id = media.photo[-1].file_id
+        else:
+            file_id = media[media.content_type].file_id
+
+        try:
+            media_group.attach({"media": file_id, "type": media.content_type})
+        except ValueError:
+            return None
+    return await bot.send_media_group(FOR_FORWARD, media_group)
+        
+@dp.message_handler(content_types=types.ContentType.ANY)
 async def handle_all(message: Message):
     db.update_user(message)
     db.save_message(message)
-    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+    return await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
 
-    return True
 
 async def on_startup(dp):
     await bot.set_webhook(f"{WEBHOOK_HOST}/bot{TOKEN}")

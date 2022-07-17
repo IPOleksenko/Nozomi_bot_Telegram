@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-15 01:58+0300\n"
-"PO-Revision-Date: 2022-07-15 01:57+0300\n"
+"POT-Creation-Date: 2022-07-18 02:37+0300\n"
+"PO-Revision-Date: 2022-07-18 02:35+0300\n"
 "Last-Translator: \n"
 "Language: ru\n"
 "Language-Team: ru <LL@li.org>\n"
@@ -18,10 +18,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
-
-#: CallBack.py:16 bot.py:112
-msgid "Which horoscope is interesting?"
-msgstr "Какой гороскоп интересен?"
 
 #: Weather_reaction.py:20
 msgid "Weater_message_1"
@@ -48,7 +44,7 @@ msgstr ""
 "Я не знаю такого города :(\n"
 "Давай посмотрим погоду в другом месте"
 
-#: bot.py:52
+#: bot.py:62
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
@@ -58,7 +54,7 @@ msgstr ""
 "/start\n"
 " "
 
-#: bot.py:61
+#: bot.py:70
 msgid "help"
 msgstr ""
 "Команды пользователя:\n"
@@ -67,10 +63,11 @@ msgstr ""
 "/random  {начальное число} {конечное число - 1} {шаг} — выводит случайно "
 "число\n"
 "/horoscope - можете посмотреть гороскоп на сегодня\n"
+"/donate {цена в долларах, целое число} - пожертвовать автору бота "
+"выбранную сумму\n"
 "\n"
 "Команды администратора:\n"
-"/MESSAGE {сообщение} {ID сообщения для ответа на него} - бот отправляет "
-"сообщение\n"
+"/MESSAGE - бот отправляет сообщение\n"
 "\n"
 "Команды владельца бота:\n"
 "/SENDBYID {ID пользователя или чата, через пробел можно указать "
@@ -79,7 +76,7 @@ msgstr ""
 "/SENDALL - принимает и отправляет выбранное вами сообщение всем "
 "пользователям и во все чаты\n"
 "/DELETE {ID группы} {ID сообщения} - удаляет сообщение которому вы "
-"ответили этой командой\n"
+"ответили этой командой или ввели ID чата и ID сообщения\n"
 "/BAN {ID группы} {ID пользователя} - блокирует пользователя в группе "
 "которому вы ответили этой командой или указали ID группы и ID "
 "пользователя\n"
@@ -91,34 +88,38 @@ msgstr ""
 "Также:\n"
 "-Бот переводит голосовые сообщения в текст\n"
 "-Бот сохраняет информацию\n"
-"-Владелец бота будет добавлен в администраторы при присоединении к группе"
-"\n"
+"-При присоединении моего владельца в чат я постараюсь выдать ему права "
+"администратора \n"
 " "
 
-#: bot.py:102
+#: bot.py:109
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "Укажи город\n"
 "/weather <city>\n"
 " "
 
-#: bot.py:146 bot.py:173
+#: bot.py:119 call_back.py:16
+msgid "Which horoscope is interesting?"
+msgstr "Какой гороскоп интересен?"
+
+#: bot.py:150 bot.py:175
 msgid "SENDBYID_NOT_REPLY"
 msgstr "Вам нужно ответить этой командой на сообщение!"
 
-#: bot.py:150
+#: bot.py:154
 msgid "SENDBYID_NOT_ID"
 msgstr "Вам нужно указать ID чата или пользователя который общался со мной!"
 
-#: bot.py:160 bot.py:185
+#: bot.py:164 bot.py:187
 msgid "You are not my owner"
 msgstr "Вы не мой владелец, я не могу выполнить для вас это("
 
-#: bot.py:253
+#: bot.py:259
 msgid "Think..."
 msgstr "Думаю..."
 
-#: bot.py:295
+#: bot.py:301
 msgid "Failed to decrypt"
 msgstr "Не удалось расшифровать"
 

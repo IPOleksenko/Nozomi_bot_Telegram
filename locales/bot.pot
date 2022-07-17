@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-15 01:58+0300\n"
+"POT-Creation-Date: 2022-07-18 02:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
-
-#: CallBack.py:16 bot.py:112
-msgid "Which horoscope is interesting?"
-msgstr ""
 
 #: Weather_reaction.py:20
 msgid "Weater_message_1"
@@ -41,37 +37,41 @@ msgstr ""
 msgid "Weater_message_5"
 msgstr ""
 
-#: bot.py:52
+#: bot.py:62
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
 msgstr ""
 
-#: bot.py:61
+#: bot.py:70
 msgid "help"
 msgstr ""
 
-#: bot.py:102
+#: bot.py:109
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 
-#: bot.py:146 bot.py:173
+#: bot.py:119 call_back.py:16
+msgid "Which horoscope is interesting?"
+msgstr ""
+
+#: bot.py:150 bot.py:175
 msgid "SENDBYID_NOT_REPLY"
 msgstr ""
 
-#: bot.py:150
+#: bot.py:154
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 
-#: bot.py:160 bot.py:185
+#: bot.py:164 bot.py:187
 msgid "You are not my owner"
 msgstr ""
 
-#: bot.py:253
+#: bot.py:259
 msgid "Think..."
 msgstr ""
 
-#: bot.py:295
+#: bot.py:301
 msgid "Failed to decrypt"
 msgstr ""
 

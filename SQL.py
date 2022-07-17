@@ -2,6 +2,7 @@ from aiogram.types import Message, User, Chat
 import psycopg2 as pg
 from psycopg2.extras import RealDictCursor
 from psycopg2.sql import SQL, Literal
+from config import DATABASE_URL
 
 
 class Database:
@@ -47,6 +48,7 @@ class Database:
                     message_id bigint,
                     chat bigint references chats(id),
                     text varchar(4096),
+                    dice json,
                     audio json,
                     document json,
                     photo json,
@@ -211,6 +213,7 @@ class Database:
             date = message.date
             chat = message.chat.id
             text = message.caption if message.caption else message.text
+            dice = message.dice.as_json() if message.dice else None
             audio = message.audio.as_json() if message.audio else None
             document = message.document.as_json() if message.document else None
             photo = message.photo[0].as_json() if message.photo else None
@@ -230,6 +233,7 @@ class Database:
                     message_id,
                     chat,
                     text,
+                    dice,
                     audio,
                     document,
                     photo,
@@ -242,7 +246,7 @@ class Database:
                     message,
                     sended_at
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, TIMESTAMP %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, TIMESTAMP %s)
                 ON CONFLICT DO NOTHING;
             """,
                 (
@@ -251,6 +255,7 @@ class Database:
                     message_id,
                     chat,
                     text,
+                    dice,
                     audio,
                     document,
                     photo,
@@ -281,3 +286,5 @@ class Database:
                 result[i]["from"] = users[result[i]["from"]]
 
             return [Message(**message) for message in result]
+
+db = Database(dsn=DATABASE_URL)

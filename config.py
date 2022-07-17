@@ -9,6 +9,7 @@ TOKEN = getenv("TOKEN")
 bot = Bot(TOKEN)
 OW_API = getenv("OW_API")
 DATABASE_URL = getenv("DATABASE_URL")
+FOR_PAYMENTS = getenv("FOR_PAYMENTS")
 FOR_FORWARD = getenv("FOR_FORWARD")
 
 BOT_OWNER_USER = getenv("BOT_OWNER_USER")
