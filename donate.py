@@ -27,15 +27,12 @@ async def cmd_buy(message: types.Message):
 
 
 async def shipping(shipping_query: types.ShippingQuery):
-    print("\n\n\n\n\n",2)
     await bot.answer_shipping_query(shipping_query.id, ok=True, shipping_options=shipping_options, error_message='😭')
 
 
 async def checkout(pre_checkout_query: types.PreCheckoutQuery):
-    print("\n\n\n\n\n",1)
     await bot.answer_pre_checkout_query(pre_checkout_query.id, ok=True, error_message="😭")
 
 
 async def got_payment(message: types.Message):
-    print("\n\n\n\n\n",3)
     await bot.send_message(message.chat.id, '💋', parse_mode='Markdown')
