@@ -29,7 +29,8 @@ class Database:
                     language_code varchar(3),
                     from_user json,
                     created_at timestamp,
-                    updated_at timestamp
+                    updated_at timestamp,
+                    donate money DEFAULT 0
                 );
                 CREATE TABLE IF NOT EXISTS chats (
                     id bigint not null unique primary key,
@@ -40,7 +41,8 @@ class Database:
                     users bigint[] default '{}',
                     chat json,
                     created_at timestamp,
-                    updated_at timestamp
+                    updated_at timestamp,
+                    toggle_voice_recognizer boolean DEFAULT FALSE
                 );
                 CREATE TABLE IF NOT EXISTS messages (
                     "from" bigint references users(id),
@@ -286,5 +288,30 @@ class Database:
                 result[i]["from"] = users[result[i]["from"]]
 
             return [Message(**message) for message in result]
+
+
+    def update_donate(self, message):
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(
+            f"UPDATE users SET donate = donate + {message.successful_payment.total_amount // 100}::MONEY WHERE id = {message.from_user.id};"
+            )    
+            
+    def update_toggleVoiceRecognizer(self, message):
+        with self.conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute(
+            f"UPDATE chats SET toggle_voice_recognizer = NOT toggle_voice_recognizer WHERE id = {message.chat.id};"
+            ) 
+    
+    def get_toggleVoiceRecognizer(self, message):
+        if not isinstance(message, Message):
+            raise TypeError("excepted Message, but got", type(message))
+  
+        with self.conn.cursor() as cursor:
+            cursor.execute(
+                """SELECT toggle_voice_recognizer FROM chats WHERE id = %s;""",
+                (message.chat.id,)
+            )
+            toggle = cursor.fetchone()[0]
+            return toggle
 
 db = Database(dsn=DATABASE_URL)

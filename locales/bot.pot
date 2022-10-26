@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-18 02:37+0300\n"
+"POT-Creation-Date: 2022-10-26 18:46+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,41 +37,45 @@ msgstr ""
 msgid "Weater_message_5"
 msgstr ""
 
-#: bot.py:62
+#: bot.py:61
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
 msgstr ""
 
-#: bot.py:70
+#: bot.py:69
 msgid "help"
 msgstr ""
 
-#: bot.py:109
+#: bot.py:116
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 
-#: bot.py:119 call_back.py:16
+#: bot.py:126 call_back.py:20
 msgid "Which horoscope is interesting?"
 msgstr ""
 
-#: bot.py:150 bot.py:175
+#: bot.py:157 bot.py:182
 msgid "SENDBYID_NOT_REPLY"
 msgstr ""
 
-#: bot.py:154
+#: bot.py:161
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 
-#: bot.py:164 bot.py:187
+#: bot.py:171 bot.py:194
 msgid "You are not my owner"
 msgstr ""
 
-#: bot.py:259
+#: bot.py:268
 msgid "Think..."
 msgstr ""
 
-#: bot.py:301
+#: bot.py:310
 msgid "Failed to decrypt"
+msgstr ""
+
+#: donate.py:23
+msgid "Sorry, an error has occurred😔"
 msgstr ""
 

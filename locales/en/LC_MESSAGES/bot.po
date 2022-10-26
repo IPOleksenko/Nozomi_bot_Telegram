@@ -7,16 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-07-18 02:37+0300\n"
-"PO-Revision-Date: 2022-07-18 02:36+0300\n"
+"POT-Creation-Date: 2022-10-26 18:46+0300\n"
+"PO-Revision-Date: 2022-10-26 19:03+0300\n"
 "Last-Translator: \n"
-"Language: en\n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: Weather_reaction.py:20
 msgid "Weater_message_1"
@@ -45,7 +46,7 @@ msgstr ""
 "I don't know a city like this :(\n"
 "Why don't you check the weather forecast somewhere else"
 
-#: bot.py:62
+#: bot.py:61
 msgid ""
 "Hello, I'm Nozomi! If you wanna start using me – send a /start in this "
 "chat"
@@ -54,7 +55,7 @@ msgstr ""
 "/start\n"
 " "
 
-#: bot.py:70
+#: bot.py:69
 msgid "help"
 msgstr ""
 "User commands:\n"
@@ -66,6 +67,8 @@ msgstr ""
 "author of the bot\n"
 "\n"
 "Administrator commands:\n"
+"/TOGGLEVOICERECOGNIZER - allow or forbid me to translate voice messages "
+"into text. Disabled by default.\n"
 "/MESSAGE - bot send message\n"
 "\n"
 "Owner bot command:\n"
@@ -86,38 +89,42 @@ msgstr ""
 "-Bot saves information\n"
 "-When joining my owner in the chat, I will try to give him admin rights"
 
-#: bot.py:109
+#: bot.py:116
 msgid "{You_didnt_enter_the_city}"
 msgstr ""
 "You didn't enter the city.\n"
 "Example: /weather <city>\n"
 " "
 
-#: bot.py:119 call_back.py:16
+#: bot.py:126 call_back.py:20
 msgid "Which horoscope is interesting?"
 msgstr "Which horoscope is interesting?"
 
-#: bot.py:150 bot.py:175
+#: bot.py:157 bot.py:182
 msgid "SENDBYID_NOT_REPLY"
 msgstr "You need to reply to this command on the message!"
 
-#: bot.py:154
+#: bot.py:161
 msgid "SENDBYID_NOT_ID"
 msgstr ""
 "You need to specify the ID of the chat or the user who communicated with "
 "me!"
 
-#: bot.py:164 bot.py:187
+#: bot.py:171 bot.py:194
 msgid "You are not my owner"
 msgstr "You are not my owner, I cannot license this to you("
 
-#: bot.py:259
+#: bot.py:268
 msgid "Think..."
 msgstr "Think..."
 
-#: bot.py:301
+#: bot.py:310
 msgid "Failed to decrypt"
 msgstr "Failed to decrypt"
+
+#: donate.py:23
+msgid "Sorry, an error has occurred😔"
+msgstr "Sorry, an error has occurred😔"
 
 #~ msgid "{Anonimus_user}"
 #~ msgstr "Who the hell are you"
@@ -132,11 +139,9 @@ msgstr "Failed to decrypt"
 
 #~ msgid "{BAKA}"
 #~ msgstr ""
-#~ "It’s too hard to understand you, "
-#~ "BAKA. Please repeat what you just "
+#~ "It’s too hard to understand you, BAKA. Please repeat what you just "
 #~ "said\n"
 #~ " "
 
 #~ msgid "There is no such zodiac sign("
 #~ msgstr "There is no such zodiac sign"
-

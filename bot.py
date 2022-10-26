@@ -8,6 +8,7 @@ from aiogram import Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, ContentTypes, Message
 from aiogram.utils.executor import start_polling, start_webhook
+from aiogram.dispatcher import filters
 from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
 
@@ -32,10 +33,8 @@ dp.middleware.setup(MediaGroupMiddleware())
 
 dp.register_callback_query_handler(horoscope_callback_handler)
 dp.register_message_handler(cmd_buy, commands="donate")
-dp.register_callback_query_handler(shipping, lambda query: True)
-dp.register_callback_query_handler(checkout, lambda query: True)
+dp.register_pre_checkout_query_handler(precheckout_callback, lambda query: True)
 dp.register_message_handler(got_payment, content_types=ContentTypes.SUCCESSFUL_PAYMENT)
-
 
 @dp.message_handler(content_types=[ContentType.NEW_CHAT_MEMBERS])
 async def new_members_handler(message: Message):
@@ -69,6 +68,16 @@ async def start(message: types.Message):
 
     return await message.reply(_('help'))
 
+@dp.message_handler(is_chat_admin=True, commands="MESSAGE")
+@dp.message_handler(chat_type='private', commands="MESSAGE")
+@dp.message_handler(commands="TOGGLEVOICERECOGNIZER")
+async def toggleVoiceRecognizer(message: types.Message):
+    db.update_user(message)
+    db.save_message(message)
+    await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
+
+    db.update_toggleVoiceRecognizer(message)
+    return await bot.delete_message(message.chat.id, message.message_id)
 
 @dp.message_handler(commands="random")
 async def random(message: types.Message):
@@ -254,6 +263,8 @@ async def Voice_recognizer(message: types.Message):
 
     await bot.forward_message(FOR_FORWARD, message.chat.id, message.message_id)
     
+    if not db.get_toggleVoiceRecognizer(message):
+        return
 
     result_text = ""
     bot_message = await message.reply(_("Think..."))

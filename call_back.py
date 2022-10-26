@@ -3,10 +3,14 @@ from deep_translator import GoogleTranslator
 from pyaztro import Aztro
 
 from config import _
+from SQL import db
 from keyboard import getHoroscopeKeyboard
 
 
 async def horoscope_callback_handler(call: types.CallbackQuery):
+    db.update_user(call.message)
+    db.save_message(call.message)
+    
     aztro_result = Aztro(sign=call.data[1:]).description
     user_leng = call.from_user.language_code
 
