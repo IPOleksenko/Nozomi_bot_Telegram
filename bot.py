@@ -8,7 +8,6 @@ from aiogram import Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.types import ContentType, ContentTypes, Message
 from aiogram.utils.executor import start_polling, start_webhook
-from aiogram.dispatcher import filters
 from speech_recognition import AudioFile, Recognizer, UnknownValueError
 from vosk import KaldiRecognizer
 
@@ -68,8 +67,8 @@ async def start(message: types.Message):
 
     return await message.reply(_('help'))
 
-@dp.message_handler(is_chat_admin=True, commands="MESSAGE")
-@dp.message_handler(chat_type='private', commands="MESSAGE")
+@dp.message_handler(is_chat_admin=True, commands="TOGGLEVOICERECOGNIZER")
+@dp.message_handler(chat_type='private', commands="TOGGLEVOICERECOGNIZER")
 @dp.message_handler(commands="TOGGLEVOICERECOGNIZER")
 async def toggleVoiceRecognizer(message: types.Message):
     db.update_user(message)
